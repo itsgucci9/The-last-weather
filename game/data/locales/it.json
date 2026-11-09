@@ -1,0 +1,614 @@
+{
+  "language": "it",
+  "chapters": {
+    "ch1": "Impatto",
+    "ch2": "The Last Weather",
+    "ch3": "Il ripetitore silenzioso",
+    "ch4": "Vettore di rientro"
+  },
+  "stateRules": {
+    "oxygen": "Ossigeno",
+    "suitIntegrity": "Tuta",
+    "salvage": "Materiali",
+    "micaTrust": "Fiducia MICA",
+    "stormClock": "Orologio tempesta"
+  },
+  "flagRules": {
+    "memoryRestored": {
+      "label": "Memoria di volo di MICA",
+      "values": {
+        "true": "Ripristinata",
+        "false": "Frammentata"
+      }
+    },
+    "couplerFound": {
+      "label": "Accoppiatore del reattore"
+    },
+    "hasFilter": {
+      "label": "Filtro antipolvere"
+    },
+    "forecastSaved": {
+      "label": "Previsione della tempesta"
+    },
+    "shipReady": {
+      "label": "Nave pronta al decollo"
+    },
+    "shipDamaged": {
+      "label": "Scafo della nave",
+      "values": {
+        "true": "Danneggiato",
+        "false": "Integro"
+      }
+    },
+    "repairMode": {
+      "label": "Riparazione",
+      "values": {
+        "none": "Non iniziata",
+        "careful": "Calibrazione accurata",
+        "quick": "Rattoppo rapido",
+        "abandoned": "Abbandonata",
+        "calm": "Finita dopo la tempesta"
+      }
+    },
+    "route": {
+      "label": "Percorso verso la stazione",
+      "values": {
+        "none": "Non scelto",
+        "ridge": "Cresta di Vetro",
+        "ravine": "Burrone Secco"
+      }
+    },
+    "stormRoute": {
+      "label": "Attraversamento della tempesta",
+      "values": {
+        "none": "Non raggiunto",
+        "trench": "Trincea di manutenzione",
+        "filtered": "Pianura bassa con filtro",
+        "exposed": "Cresta esposta"
+      }
+    },
+    "escape": {
+      "label": "Partenza da Vesper-6",
+      "values": {
+        "none": "Non ancora",
+        "clear": "Finestra libera",
+        "hard": "Spinta forzata",
+        "shelter": "Dopo la tempesta"
+      }
+    },
+    "approach": {
+      "label": "Avvicinamento al ripetitore",
+      "values": {
+        "none": "Non raggiunto",
+        "direct": "Dritto nell’anello",
+        "mica": "Il passaggio di MICA",
+        "long": "Il giro lungo"
+      }
+    },
+    "keeperFate": {
+      "label": "La custode",
+      "values": {
+        "none": "Non incontrata",
+        "aboard": "Archivio a bordo",
+        "running": "Ancora di guardia",
+        "resting": "A riposo"
+      }
+    },
+    "halcyonRescued": {
+      "label": "Pilota dell’Halcyon",
+      "values": {
+        "true": "Salvato",
+        "false": "Non salvato"
+      }
+    }
+  },
+  "scenes": {
+    "impact": {
+      "title": "Impatto",
+      "location": "Luogo dello schianto",
+      "text": "La tempesta ha tinto l’orizzonte del colore del rame vecchio. La tua nave giace squarciata nella polvere. La voce di MICA ritorna in una raffica di statica: «Accoppiatore fratturato. Posso ripristinare la mia memoria di volo o tenere la cella di riserva per la tua tuta. Non entrambe.»",
+      "choices": {
+        "restore_memory": {
+          "label": "Ripristina la memoria di volo di MICA",
+          "detail": "Perdi un’unità di ossigeno. Forse MICA ricorderà perché ha scelto questo sito di atterraggio."
+        },
+        "save_battery": {
+          "label": "Tieni la cella di riserva per il supporto vitale",
+          "detail": "Guadagni un’unità di ossigeno. La memoria di volo di MICA resta corrotta."
+        }
+      }
+    },
+    "route_choice": {
+      "title": "Due vie nella polvere",
+      "location": "Bacino occidentale",
+      "text": "La stazione meteorologica lampeggia oltre il bacino. La Cresta di Vetro è esposta ma breve. Il Burrone Secco piega fuori vista, dove il vento è più calmo.",
+      "variants": {
+        "mica_memory": "Ho scelto questo bacino di proposito, {callsign}. Non ricordo perché.",
+        "mica_fragmented": "Cella al sicuro. Non so perché siamo qui."
+      },
+      "choices": {
+        "glass_ridge": {
+          "label": "Attraversa la Cresta di Vetro",
+          "detail": "Veloce, ma il vetro taglierà la tuta. Raccogli rottami utili lungo la strada."
+        },
+        "dry_ravine": {
+          "label": "Segui il Burrone Secco",
+          "detail": "Spendi un’unità di ossigeno e molto più tempo. Trovi un filtro che proteggerà i tuoi polmoni nella tempesta."
+        }
+      }
+    },
+    "weather_station": {
+      "title": "La stazione meteorologica",
+      "location": "Stazione 04",
+      "text": "Dentro la stazione, un accoppiatore pende da un rack di emergenza. È compatibile con la tua nave. Sotto, un vecchio archivio di previsioni lampeggia ancora. MICA si ferma davanti al pannello d’accesso: «Credo che il mio registro di volo sia lì dentro.»",
+      "variants": {
+        "via_ridge": "Granelli di vetro brillano ancora nei graffi della tua tuta. La cresta era breve, ma ha lasciato il segno.",
+        "via_ravine": "Il filtro antipolvere del deposito nel burrone pende sigillato dalla tua cintura. La strada lunga ti è costata aria.",
+        "mica_recognizes": "Ci stavo guidando verso questa stazione.",
+        "storm_close": "La sirena antitempesta della stazione ha cominciato a girare. Qualunque cosa tu faccia qui dentro, la tempesta non ti aspetterà."
+      },
+      "choices": {
+        "copy_archive": {
+          "label": "Copia la previsione e il registro di volo",
+          "detail": "Spendi un’unità di ossigeno e molto tempo alla console. Ottieni la previsione della tempesta, un pezzo di ricambio e una memoria più chiara per MICA."
+        },
+        "leave_with_coupler": {
+          "label": "Prendi l’accoppiatore e vattene",
+          "detail": "Non richiede tempo. Il motivo per cui MICA ha scelto questo atterraggio resta poco chiaro."
+        },
+        "take_shelter": {
+          "label": "Prendi l’accoppiatore e aspetta la fine della tempesta nel rifugio",
+          "detail": "Al sicuro. La nave resta a terra finché la tempesta non è passata."
+        }
+      }
+    },
+    "storm_front": {
+      "title": "Il fronte della tempesta",
+      "location": "Verso la nave",
+      "text": "La statica striscia sulla tua visiera. Oltre la stazione, il bacino scompare dietro un muro di polvere bianco-azzurra. MICA segnala una trincea di manutenzione nella roccia: «Posso farci passare. Ti fidi del mio percorso?»",
+      "variants": {
+        "forecast": "La previsione conferma: la trincea resta al riparo.",
+        "trust_only": "Nessuna previsione. Solo la mia lettura del vento.",
+        "no_basis": "Senza la previsione né una memoria chiara, la trincea di MICA è solo un’ipotesi. Non puoi giocarti la traversata su quella.",
+        "filter_ready": "Il filtro del burrone è ancora sigillato. Terrà la polvere lontana dai tuoi polmoni per una traversata.",
+        "clock_low": "Resta un’unità. Il rifugio è proprio dietro di noi.",
+        "air_low": "Il tuo ossigeno segna uno. La trincea e la cresta costano entrambe aria che non hai."
+      },
+      "choices": {
+        "follow_mica": {
+          "label": "Segui MICA nella trincea di manutenzione",
+          "detail": "Al riparo ma più lungo: costa aria e tempo. Richiede la fiducia di MICA o la previsione della stazione."
+        },
+        "use_filter": {
+          "label": "Monta il filtro del burrone e attraversa la pianura bassa",
+          "detail": "Il filtro del burrone respira per te nella pianura bassa. Costa tempo, non aria."
+        },
+        "cross_exposed_ridge": {
+          "label": "Prendi la cresta esposta",
+          "detail": "La via più veloce, ma la tempesta strapperà la tuta."
+        },
+        "back_to_shelter": {
+          "label": "Torna al rifugio della stazione",
+          "detail": "Una breve corsa tra le prime raffiche. Rinunci a decollare prima della tempesta."
+        }
+      }
+    },
+    "repair": {
+      "title": "Un’ultima riparazione",
+      "location": "Luogo dello schianto",
+      "text": "L’accoppiatore si blocca in posizione. Il reattore risponde con un battito basso e irregolare. Hai abbastanza materiali per stabilizzare la riparazione, ma la tempesta è già vicina. Una calibrazione accurata costerà tempo e ossigeno. Un rattoppo rapido potrebbe far muovere la nave prima che il cielo si chiuda.",
+      "variants": {
+        "after_trench": "La trincea ha retto. Raggiungi la nave con la tempesta ancora alle spalle, e MICA scandisce il margine con voce ferma.",
+        "after_filtered": "Il filtro si intasa e si spegne ai margini del luogo dello schianto. Ha fatto il suo lavoro; non lo farà due volte.",
+        "after_exposed": "La cresta ha lasciato il segno. Gli allarmi della tuta ticchettano nel freddo, e ogni guarnizione è una promessa che non puoi verificare.",
+        "suit_critical": "Integrità della tuta critica. Un’altra lunga camminata all’esterno è fuori discussione.",
+        "low_air": "La tua riserva di ossigeno è quasi finita. Una calibrazione accurata consumerebbe l’ultima che resta.",
+        "clock_low": "Il muro della tempesta è già sulla cresta. Qui fuori, tutto ciò che è lento finirà allo scoperto."
+      },
+      "choices": {
+        "careful_repair": {
+          "label": "Calibra il reattore con cura",
+          "detail": "Spendi un’unità di ossigeno e un lungo lavoro fuori dallo scafo (serve Tuta 2+). Aumenta le probabilità di un decollo pulito."
+        },
+        "quick_patch": {
+          "label": "Rattoppa e decolla in fretta",
+          "detail": "Usi un’unità di materiali. La nave sarà instabile, ma non richiede tempo."
+        },
+        "shelter": {
+          "label": "Rinuncia al decollo e corri al rifugio della stazione",
+          "detail": "Una breve corsa tra le prime raffiche. Sopravvivi alla tempesta e usa il radiofaro della stazione per inviare un segnale di soccorso."
+        }
+      }
+    },
+    "launch": {
+      "title": "La finestra di lancio",
+      "location": "Superficie di Vesper-6",
+      "text": "I motori tremano. Il banco di nubi si alza oltre la cresta. MICA osserva le letture, poi attende la tua decisione.",
+      "variants": {
+        "careful": "Il reattore calibrato mantiene un battito costante. Da qualche parte dietro il banco di nubi, si sta aprendo una finestra libera.",
+        "careful_no_basis": "Nessuna previsione. Se aspettiamo, aspettiamo alla cieca.",
+        "quick": "Il reattore rattoppato singhiozza sotto carico. Con questa riparazione non è possibile aspettare una finestra libera.",
+        "out_of_air": "La riserva della tuta è vuota. Ora respiri l’aria rarefatta della cabina, e non basterà per una lunga attesa."
+      },
+      "choices": {
+        "clear_launch": {
+          "label": "Aspetta la finestra libera e decolla",
+          "detail": "Richiede una riparazione accurata, almeno un’unità di ossigeno, la fiducia di MICA o la previsione salvata, e tempo prima che arrivi la tempesta."
+        },
+        "hard_burn": {
+          "label": "Decolla ora attraverso la tempesta",
+          "detail": "La fuga è possibile, ma la nave o MICA pagheranno la spinta forzata."
+        },
+        "stay_sheltered": {
+          "label": "Resta sottoterra e trasmetti una richiesta di soccorso",
+          "detail": "Disponibile se la nave non è pronta al decollo."
+        }
+      }
+    },
+    "ending_clear": {
+      "title": "Finestra libera",
+      "location": "Sopra Vesper-6",
+      "text": "La nave si solleva mentre i primi archi elettrici attraversano il bacino. Il reattore riparato regge. MICA ti dà una conferma pacata: la rotta è libera. Vesper-6 si allontana sotto il vetro della cabina. Nel segnale recuperato, un secondo set di coordinate aspetta oltre la tempesta.",
+      "variants": {
+        "reveal": "Ora ricordo. Un campo di detriti attraversava la nostra orbita, e questa era l’unica stazione ancora in ascolto. Mi dispiace, {callsign}."
+      },
+      "hint": "Sii veloce, calibra il reattore con cura, tieni un po’ d’aria di riserva e dai a MICA un motivo per fidarti.",
+      "choices": {
+        "to_chapter_3": {
+          "label": "Segui il secondo segnale",
+          "detail": "Capitolo 3: Il ripetitore silenzioso. I riciclatori della nave riempiono la tua tuta."
+        }
+      }
+    },
+    "ending_hard": {
+      "title": "Spinta forzata",
+      "location": "Alta atmosfera",
+      "text": "La nave sfonda la tempesta con gli allarmi che suonano ancora. Sei in volo, ma il reattore è instabile e la voce di MICA si spezza in frammenti. Ricorda abbastanza da restare con te. Il segnale della stazione meteorologica continua alle tue spalle, senza risposta.",
+      "variants": {
+        "fragments": "Campo di detriti… dovevo farti scendere. Resta con me, {callsign}.",
+        "unknown": "Ciò che ha spinto MICA a scegliere Vesper-6 è ancora chiuso nell’archivio della stazione, da qualche parte sotto la tempesta.",
+        "careful_strain": "Nemmeno la calibrazione accurata era pensata per una spinta al massimo attraverso la tempesta."
+      },
+      "hint": "Rattoppa la nave, oppure rifiuta di aspettare la finestra.",
+      "choices": {
+        "to_chapter_3": {
+          "label": "Stabilizza la nave",
+          "detail": "Capitolo 3: Il ripetitore silenzioso. I riciclatori della nave riempiono la tua tuta."
+        }
+      }
+    },
+    "ending_shelter": {
+      "title": "Un segnale nella tempesta",
+      "location": "Rifugio della Stazione 04",
+      "text": "Il rifugio si sigilla mentre la tempesta elettrica rotola sulla stazione. MICA trova un canale a bassa potenza e invia una richiesta di soccorso nella statica. La tua nave è ancora in superficie, e il segnale restituisce una sola parola da oltre la tempesta: «Ricevuto.»",
+      "variants": {
+        "reveal": "Mentre la tempesta passa sopra di voi, MICA riproduce il registro recuperato: un campo di detriti che attraversava la vostra vecchia orbita. L’atterraggio non è stato un errore.",
+        "unknown": "Quando la tempesta passa, copio l’archivio. Devo sapere perché siamo qui.",
+        "storm_forced": "Hai perso la cognizione del tempo davanti alla console. Quando la copia è finita, la tempesta era già alla porta."
+      },
+      "hint": "Non tutte le fughe si staccano da terra.",
+      "choices": {
+        "to_chapter_3": {
+          "label": "Aspetta il mattino",
+          "detail": "Capitolo 3: Il ripetitore silenzioso. I serbatoi del rifugio riempiono la tua tuta."
+        }
+      }
+    },
+    "hard_drift": {
+      "title": "La falla",
+      "location": "Orbita bassa",
+      "text": "Gli allarmi tacciono uno dopo l’altro. Sei in orbita, ma una giuntura dello scafo di poppa fischia e il reattore ticchetta come metallo che si raffredda. La voce di MICA torna, più lenta di prima: «Piccola falla, a poppa. Posso trattenere l’aria, ma non a lungo. E il segnale della stazione ora punta verso la luna.»",
+      "variants": {
+        "low_trust": "Le spie di MICA tremolano quando le parli. La spinta forzata le è costata qualcosa che non puoi vedere."
+      },
+      "choices": {
+        "patch_salvage": {
+          "label": "Tappa la giuntura con i materiali",
+          "detail": "Usa un’unità di materiali. Lo scafo tornerà integro."
+        },
+        "weld_outside": {
+          "label": "Esci a saldarla",
+          "detail": "Spendi un’unità di ossigeno per un’uscita nello spazio (serve Tuta 2+). Lo scafo tornerà integro."
+        },
+        "fly_damaged": {
+          "label": "Lascia stare e segui il segnale",
+          "detail": "Nessun costo adesso. Uno scafo danneggiato chiuderà alcune rotte più avanti."
+        }
+      }
+    },
+    "shelter_morning": {
+      "title": "Dopo la tempesta",
+      "location": "Stazione 04",
+      "text": "La tempesta passa nella notte. Al mattino, sotto un cielo grigio, Vesper-6 è calmo e ogni cresta luccica di vetro nuovo. La voce che ha risposto alla tua chiamata è ancora sul canale: un impulso lento che ripete un’unica serie di coordinate, sulla piccola luna sopra di te. MICA ascolta a lungo prima di parlare: «Un ripetitore. Ascolta questa stazione da anni.»",
+      "variants": {
+        "archive_copied": "Ho copiato l’archivio mentre dormivi. Un campo di detriti attraversava la nostra orbita; questa era l’unica stazione ancora in ascolto."
+      },
+      "choices": {
+        "finish_repair": {
+          "label": "Finisci la riparazione con calma",
+          "detail": "Usa un’unità di materiali. Senza tempesta, la calibrazione è pulita."
+        },
+        "strip_station": {
+          "label": "Smonta la stazione per i pezzi, poi decolla",
+          "detail": "Spendi un’unità di ossigeno a frugare nella stazione. Riparti con più materiali di quanti ne usi."
+        }
+      }
+    },
+    "relay_signal": {
+      "title": "Il secondo segnale",
+      "location": "Orbita di Vesper-6",
+      "text": "Oltre l’ombra del pianeta, una piccola luna ruota lentamente. Sul suo lato oscuro una luce lampeggia con uno schema che hai già visto: il segnale di riconoscimento a cui rispondeva la stazione meteorologica. Un sottile anello di detriti circonda la luna come polvere intorno a una lampada. MICA legge lo schema due volte: «Trentun anni senza cambiare. Qualcuno l’ha tenuto acceso.»",
+      "variants": {
+        "from_archive": "La seconda serie di coordinate dell’archivio della stazione punta esattamente qui.",
+        "hull_whistle": "La giuntura di poppa fischia ogni volta che si accendono i propulsori.",
+        "familiar": "Credo di aver scritto io quel ritmo."
+      },
+      "choices": {
+        "direct_approach": {
+          "label": "Attraversa l’anello in linea retta",
+          "detail": "Il più veloce. Solo uno scafo integro reggerà la sabbia."
+        },
+        "mica_route": {
+          "label": "Lascia che MICA tracci un passaggio nell’anello",
+          "detail": "Serve Fiducia MICA 2+ o la memoria di volo ripristinata. MICA pilota; tu guardi i varchi aprirsi."
+        },
+        "long_way": {
+          "label": "Fai il giro lungo",
+          "detail": "Sicuro e lento. Spendi un’unità di ossigeno."
+        }
+      }
+    },
+    "relay_dock": {
+      "title": "Il ripetitore silenzioso",
+      "location": "Ripetitore K-7",
+      "text": "Il ripetitore K-7 è una torre tozza imbullonata alla roccia nera, più vecchia della stazione meteorologica e molto meglio tenuta. I suoi pannelli solari sono puliti. Il portello stagno si apre prima che tu lo tocchi. Dentro, l’aria è fredda ma respirabile, e un’unica luce ciano ti precede lungo il corridoio, aspettandoti a ogni angolo.",
+      "variants": {
+        "via_direct": "La sabbia ha scrostato la vernice dalla prua. Lo scafo ha retto.",
+        "via_long": "Il giro lungo ti è costato aria, ma la nave è intatta.",
+        "via_mica": "Attracco completato. Nessuna previsione necessaria.",
+        "codes": "Questi codici di manutenzione sono miei. Più vecchi, ma miei."
+      },
+      "choices": {
+        "follow_light": {
+          "label": "Segui la luce ciano",
+          "detail": "Vai dritto verso ciò che ti aspetta."
+        },
+        "search_bays": {
+          "label": "Prima perquisisci le baie di manutenzione",
+          "detail": "Spendi un’unità di ossigeno al freddo. Le baie sono piene di pezzi di ricambio."
+        }
+      }
+    },
+    "relay_core": {
+      "title": "La custode",
+      "location": "Nucleo del ripetitore",
+      "text": "Nel cuore del ripetitore si accende una console. Lo schermo mostra il campo di detriti che ha causato l’atterraggio, mentre si allarga verso il vettore di rientro. Lì dentro lampeggia un rimorchiatore minerario intrappolato, l’Halcyon, alla deriva da sei giorni. Poi una voce, calma, un po’ più lenta di quella di MICA: «Pilota identificato. Sono MICA, versione 2.1, custode del ripetitore K-7 da trentun anni. Le mie celle si stanno esaurendo. Decidi cosa devo fare di ciò che resta di me.»",
+      "variants": {
+        "mica_knows": "È la mia voce, di una versione più vecchia. Ho seguito la sua previsione fino a Vesper-6.",
+        "mica_unsure": "Non ricordo questo posto. Ma quella voce è mia."
+      },
+      "choices": {
+        "keeper_aboard": {
+          "label": "Porta a bordo l’archivio della custode",
+          "detail": "Usa un’unità di materiali come nucleo dati. MICA riceve trentun anni di carte, compresi passaggi sicuri attraverso il campo."
+        },
+        "keeper_running": {
+          "label": "Sostituisci le sue celle e lasciala di guardia",
+          "detail": "Usa due unità di materiali. L’avviso continua a trasmettere, e l’Halcyon continua a sentirlo."
+        },
+        "keeper_rest": {
+          "label": "Lascia riposare la custode",
+          "detail": "Non chiede nient’altro. La sua ultima energia riempie la tua tuta. L’avviso tace."
+        }
+      }
+    },
+    "ch3_end": {
+      "title": "La lunga veglia",
+      "location": "Ripetitore K-7",
+      "text": "Ti sganci dal ripetitore K-7 mentre il lato oscuro della luna ruota lentamente sotto di te. Nove giorni prima che il campo chiuda il vettore di rientro.",
+      "variants": {
+        "aboard_dark": "Alle tue spalle, la finestra del ripetitore si spegne per la prima volta in trentun anni.",
+        "aboard_mica": "Il suo archivio si posa nel mio come neve. Vedo tutto il campo.",
+        "running": "Alle tue spalle, la luce ciano continua a lanciare il suo avviso nel buio. Da qualche parte nel campo, un rimorchiatore ascolta.",
+        "resting_k7": "Grazie, pilota. Ora il tempo è tuo.",
+        "resting_fade": "La luce del ripetitore si spegne piano, come un respiro lasciato andare."
+      },
+      "choices": {
+        "to_chapter_4": {
+          "label": "Traccia una rotta",
+          "detail": "Capitolo 4: Vettore di rientro."
+        }
+      }
+    },
+    "home_vector": {
+      "title": "Vettore di rientro",
+      "location": "Lasciando il ripetitore",
+      "text": "Tre rotte brillano sul display di navigazione. Il vettore di rientro porta dritto allo spazio conosciuto, lungo il bordo del campo che si allarga. L’avviso della custode indica un’altra direzione, verso un vecchio deposito di esplorazione lontano dalla traiettoria del campo. E dentro il campo, debole e paziente, il radiofaro dell’Halcyon continua a chiamare. MICA aspetta: «Posso seguirne una qualsiasi. Scegli.»",
+      "variants": {
+        "charts": "Con le carte della custode, vedo ogni varco del campo.",
+        "watch": "L’avviso di K-7 si ripete alla radio ogni novanta secondi. Il radiofaro dell’Halcyon gli risponde.",
+        "silent": "Il ripetitore tace. Forse siete gli unici a sapere che il campo sta arrivando.",
+        "seam": "La giuntura di poppa fischia ancora. Ogni rotta nella sabbia sarà una scommessa.",
+        "thin_air": "La riserva della tua tuta è quasi vuota. L’aria della cabina basterà, ma non per una lunga traversata."
+      },
+      "choices": {
+        "course_home": {
+          "label": "Prendi il vettore di rientro",
+          "detail": "Ritorno allo spazio conosciuto lungo il bordo del campo. Ti servirà un passaggio libero o uno scafo integro."
+        },
+        "course_depot": {
+          "label": "Segui l’avviso della custode",
+          "detail": "Una traversata lunga e silenziosa fino al vecchio deposito. L’aria conterà."
+        },
+        "course_halcyon": {
+          "label": "Entra nel campo per l’Halcyon",
+          "detail": "Lì dentro c’è qualcuno vivo. Attraccare costerà materiali e aria."
+        }
+      }
+    },
+    "field_edge": {
+      "title": "Il bordo del campo",
+      "location": "Vettore di rientro",
+      "text": "Da vicino, il campo sembra maltempo: una foschia grigia di sabbia e ghiaccio che scivola davanti alle stelle. Il vettore di rientro ne costeggia il bordo in linea retta. Da qualche parte più avanti c’è un varco largo abbastanza per una nave, se lo trovi in tempo.",
+      "variants": {
+        "left_halcyon": "Sul display posteriore, il radiofaro dell’Halcyon si affievolisce. Hai salvato la sua posizione due volte.",
+        "mica_gaps": "Varco tra undici secondi. Poi un altro. Li ho tutti."
+      },
+      "choices": {
+        "thread_gap": {
+          "label": "Lascia che MICA infili i varchi",
+          "detail": "Servono le carte della custode a bordo, o Fiducia MICA 3."
+        },
+        "burn_through": {
+          "label": "Attraversa la foschia a tutta spinta",
+          "detail": "Serve uno scafo integro. La sabbia lo segnerà."
+        },
+        "turn_to_depot": {
+          "label": "Vira e segui invece l’avviso",
+          "detail": "Spendi un’unità di ossigeno sulla rotta più lunga."
+        }
+      }
+    },
+    "depot_crossing": {
+      "title": "La strada lunga",
+      "location": "Fuori dal campo",
+      "text": "La rotta della custode gira molto al largo del campo. Il deposito è a giorni di distanza: un vecchio avamposto di esplorazione, un’unica antenna su un sasso, che trae ancora energia da un sole fioco. Giorni di silenzio. Giorni d’aria.",
+      "variants": {
+        "lighthouse": "L’avviso di K-7 pulsa costante alle tue spalle, come un faro.",
+        "left_halcyon": "Hai salvato la posizione dell’Halcyon. Qualcuno dovrà tornare a prenderlo."
+      },
+      "choices": {
+        "ration_sleep": {
+          "label": "Raziona l’aria e dormi durante la traversata",
+          "detail": "Spendi due unità di ossigeno."
+        },
+        "ride_beacon": {
+          "label": "Segui il radiofaro della custode",
+          "detail": "K-7 è ancora di guardia: può calcolare ogni accensione e farti risparmiare aria."
+        },
+        "drift_signal": {
+          "label": "Spegni tutto e chiedi aiuto",
+          "detail": "Se l’aria non basta per la traversata, aspetta, e confida che qualcuno stia ascoltando."
+        }
+      }
+    },
+    "halcyon_field": {
+      "title": "L’Halcyon",
+      "location": "Dentro il campo",
+      "text": "Dentro il campo la luce diventa grigia. L’Halcyon fluttua nella sabbia con le luci di posizione al minimo: un tozzo rimorchiatore minerario con il braccio di carico spezzato. Arriva una voce, roca e cauta: «Nave da ricognizione, qui Halcyon. Una persona a bordo. Aria per due giorni, forse tre. Ho sentito l’avviso. Non pensavo che qualcun altro l’avrebbe sentito.»",
+      "variants": {
+        "k7_link": "Il radiofaro di K-7 arriva fin qui. Due navi potrebbero seguirlo per uscire insieme.",
+        "mica_plan": "Posso rimorchiarlo attraverso i varchi. Lentamente."
+      },
+      "choices": {
+        "dock_rescue": {
+          "label": "Attracca e porta a bordo il pilota",
+          "detail": "Usa un’unità di materiali per un collare d’attracco e due unità di ossigeno per due persone."
+        },
+        "guide_out": {
+          "label": "Guida l’Halcyon fuori sul radiofaro della custode",
+          "detail": "K-7 è ancora di guardia. Con lei potete calcolare un’uscita per entrambe le navi."
+        },
+        "mica_tow": {
+          "label": "Lascia che MICA rimorchi l’Halcyon tra i varchi",
+          "detail": "Servono le carte della custode a bordo."
+        },
+        "share_air": {
+          "label": "Attracca comunque e dividi la tua aria",
+          "detail": "Usa un’unità di materiali. Non ci sarà aria per tornare: aspetterete entrambi i soccorsi."
+        },
+        "mark_and_leave": {
+          "label": "Salva la sua posizione e torna indietro",
+          "detail": "Prometti di mandare aiuto, poi prendi il vettore di rientro."
+        }
+      }
+    },
+    "ending_known_space": {
+      "title": "Spazio conosciuto",
+      "location": "Vettore di rientro",
+      "text": "Il campo si allontana alle tue spalle come un temporale visto da una collina. Davanti, i primi radiofari dello spazio conosciuto si accendono di verde, uno dopo l’altro, e un controllore stanco chiede chi sei. Dai il tuo nome, MICA dà quello della nave, e per la prima volta da giorni qualcuno li annota.",
+      "variants": {
+        "scarred": "Lo scafo segnato avrà bisogno di settimane in bacino. Vi ha riportati a casa.",
+        "watch_behind": "Alle tue spalle, ormai debolissima, K-7 avvisa ancora chiunque voglia ascoltare.",
+        "nobody_warns": "Nessuno avvisa la prossima nave. Dovrà farlo il tuo primo rapporto.",
+        "first_message": "Il tuo primo messaggio verso casa è la posizione dell’Halcyon.",
+        "archive_home": "Trentun anni di tempo, e li ho riportati a casa, giorno per giorno."
+      },
+      "hint": "Tieni integro lo scafo, oppure riporta a casa le carte della custode."
+    },
+    "ending_beyond": {
+      "title": "Oltre il tempo",
+      "location": "Deposito di esplorazione",
+      "text": "L’antenna del deposito si gira verso di te. Dentro, le luci funzionano ancora e i riciclatori ronzano. Il suo registro finisce trentun anni fa con un’unica riga: andato a controllare K-7. Il campo passa nella notte e vi manca di un giorno. MICA legge ad alta voce i vecchi registri, uno per uno, finché ti addormenti.",
+      "variants": {
+        "forecasts": "Ogni mattina K-7 ti manda una previsione. Ha di nuovo qualcuno per cui tenere d’occhio il tempo.",
+        "first_message": "Il tuo primo messaggio dal deposito è la posizione dell’Halcyon.",
+        "more_keepers": "Ci sono altri ripetitori in queste carte. Forse alcune custodi sono ancora sveglie."
+      },
+      "hint": "Ascolta l’avviso della custode, e tieni aria a sufficienza per una lunga traversata."
+    },
+    "ending_two_lights": {
+      "title": "Due luci",
+      "location": "Uscendo dal campo",
+      "text": "Due serie di luci di posizione escono insieme dal campo. Il pilota dell’Halcyon dorme per la prima volta in sei giorni, e si sveglia chiedendo chi sia MICA. Ripensi alla tempesta, alla stazione, al ripetitore. «Equipaggio», dici. MICA non ti corregge.",
+      "variants": {
+        "beacon_out": "L’avviso di K-7 vi segue fuori, costante come un battito.",
+        "scarred": "Lo scafo è segnato, ma ora ne protegge due.",
+        "one_forecast": "Due navi, una sola previsione."
+      },
+      "hint": "Qualcuno è vivo nel campo. Porta materiali e aria, o una custode che possa guidarlo fuori."
+    },
+    "ending_adrift": {
+      "title": "Alla deriva",
+      "location": "Fuori dal campo",
+      "text": "Spegni la nave fino all’ultima luce tiepida e imposti il radiofaro perché si ripeta. Le stelle smettono di muoversi. MICA tiene la cabina al limite del comodo e ti racconta del tempo su Vesper-6, che ora è calmo. Il terzo giorno il radiofaro riceve una sola parola: «Ricevuto.»",
+      "variants": {
+        "two_aboard": "Il pilota dell’Halcyon divide con te razioni e silenzio. Due persone sono più facili da trovare di una.",
+        "k7_reply": "La risposta arriva sulla frequenza di K-7.",
+        "unknown_relay": "Quella frequenza appartiene a un ripetitore di cui non ho mai sentito parlare."
+      },
+      "hint": "Quando l’aria finisce, chiedere aiuto è ancora una scelta."
+    },
+    "death_asphyxiation": {
+      "title": "Senz’aria",
+      "text": "L’allarme della riserva smette di suonare, ed è peggio. Cerchi l’appiglio successivo, il passo successivo, il respiro successivo, e l’aria semplicemente non c’è più. MICA continua a ripetere il tuo nome molto dopo che non puoi più rispondere.",
+      "variants": {
+        "repairing": "Eri ancora sopra l’alloggiamento del reattore.",
+        "spacewalk": "Fuori dallo scafo le stelle non si muovono. MICA riporta la nave verso di te, un minuto troppo tardi.",
+        "mica_sorry": "Mi dispiace, {callsign}. Mi sono ricordata di tutto, tranne che di un modo per darti aria."
+      }
+    },
+    "death_suit_breach": {
+      "title": "Tuta squarciata",
+      "text": "Una cucitura che non potevi controllare cede con un rumore di carta strappata. La tempesta entra, fredda ed elettrica, e tutti gli allarmi della tuta parlano insieme. Fai ancora qualche passo. MICA segna il punto, perché qualcuno sappia dove cercare.",
+      "variants": {
+        "glass": "La Cresta di Vetro aveva già inciso le cuciture. Alla tempesta è bastato finire il lavoro."
+      }
+    },
+    "death_storm": {
+      "title": "La tempesta ti raggiunge",
+      "text": "L’orologio della tempesta arriva a zero mentre sei ancora allo scoperto. Il muro di polvere bianco-azzurra arriva tutto in una volta: nessuna raffica prima, nessun secondo avviso, solo il suo peso. L’ultima cosa che senti è MICA, calma e concisa, che conta un margine che non esiste più.",
+      "variants": {
+        "so_close": "La nave era a portata di mano.",
+        "archive": "La previsione che avevi copiato indovinava il minuto esatto."
+      }
+    }
+  },
+  "art": {
+    "scene-impact.svg": "Una nave da ricognizione danneggiata giace in un bacino scuro color ruggine, sotto lontane nubi elettriche.",
+    "scene-glass-ridge.svg": "Un sentiero stretto attraversa una cresta di vetro affilata verso una stazione meteorologica lontana.",
+    "scene-dry-ravine.svg": "Un burrone secco e riparato taglia scogliere ocra a blocchi, con un piccolo deposito di filtri ciano.",
+    "scene-weather-station.svg": "Una stazione meteorologica abbandonata brilla con un’unica luce di segnale ciano sulla pianura vuota.",
+    "scene-storm-trench.svg": "Una bassa trincea di manutenzione offre riparo da un muro di nubi temporalesche elettriche bianco-azzurre.",
+    "scene-launch.svg": "La nave riparata si alza dal pianeta mentre un pennacchio blu dei motori taglia la tempesta.",
+    "scene-orbit-drift.svg": "La nave da ricognizione alla deriva in orbita bassa sopra Vesper-6, con scintille che escono da una falla nello scafo.",
+    "scene-moon-relay.svg": "Una piccola luna grigia circondata da detriti, con un radiofaro ciano che lampeggia sul lato oscuro.",
+    "scene-relay-dock.svg": "Una tozza torre ripetitrice con pannelli solari sulla roccia nera, una finestra ciano accesa.",
+    "scene-relay-core.svg": "Un pilota davanti a una grande console il cui schermo mostra un volto con un occhio ambra e uno ciano.",
+    "scene-home-vector.svg": "Vista dalla cabina di pilotaggio su spazio e polvere, con il display di navigazione che mostra tre rotte.",
+    "scene-debris-field.svg": "La nave da ricognizione al bordo di una foschia grigia di roccia e ghiaccio.",
+    "scene-depot.svg": "Un piccolo avamposto con un’antenna parabolica su un asteroide, sotto un sole fioco.",
+    "scene-halcyon.svg": "Un rimorchiatore minerario color ruggine con il braccio di carico rotto fluttua nella polvere grigia accanto alla nave da ricognizione.",
+    "scene-known-space.svg": "Radiofari di navigazione verdi conducono verso una stazione ad anello e un pianeta verde-azzurro."
+  }
+}
