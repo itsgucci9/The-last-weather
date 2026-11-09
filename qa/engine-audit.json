@@ -1,0 +1,70 @@
+{
+  "localization": {
+    "es": {
+      "missing": 0,
+      "uiKeys": 116
+    },
+    "fr": {
+      "missing": 0,
+      "uiKeys": 116
+    },
+    "it": {
+      "missing": 0,
+      "uiKeys": 116
+    },
+    "pt": {
+      "missing": 0,
+      "uiKeys": 116
+    }
+  },
+  "storyMode": {
+    "states": 18400,
+    "transitions": 18471,
+    "lethalTransitions": 8,
+    "unreachable": [
+      "death_asphyxiation"
+    ]
+  },
+  "survivalMode": {
+    "states": 14364,
+    "transitions": 14426,
+    "reachableScenes": 26
+  },
+  "reachableScenes": [
+    "impact",
+    "route_choice",
+    "weather_station",
+    "ending_shelter",
+    "shelter_morning",
+    "relay_signal",
+    "relay_dock",
+    "relay_core",
+    "ch3_end",
+    "home_vector",
+    "halcyon_field",
+    "field_edge",
+    "depot_crossing",
+    "ending_adrift",
+    "ending_beyond",
+    "ending_known_space",
+    "ending_two_lights",
+    "storm_front",
+    "repair",
+    "launch",
+    "ending_hard",
+    "hard_drift",
+    "death_storm",
+    "death_suit_breach",
+    "ending_clear"
+  ],
+  "terminalScenes": [
+    "ending_adrift",
+    "ending_beyond",
+    "ending_known_space",
+    "ending_two_lights",
+    "death_storm",
+    "death_suit_breach"
+  ],
+  "oldSavePreserved": true,
+  "newCarefulRouteSurvives": true
+}

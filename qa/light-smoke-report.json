@@ -1,0 +1,9 @@
+{
+  "results": [
+    "390px legacy save, explicit fatal warning, double-tap guard, run-over timeline, chapter retry, no horizontal scroll",
+    "All five language switches render without runtime errors",
+    "New service-worker cache loads game and journal module offline",
+    "Original Survival supplies and malformed gallery recovery"
+  ],
+  "errors": []
+}
