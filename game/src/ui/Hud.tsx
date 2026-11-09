@@ -4,19 +4,27 @@ import type { Session, Story } from '../engine/types';
 import type { UiStrings } from '../i18n/ui';
 import type { Reveal } from './guide';
 
+export interface MeterPop {
+  id: number;
+  field: string;
+  delta: number;
+}
+
 interface Props {
   story: Story;
   session: Session;
   ui: UiStrings;
   /** Which meters to show (they appear the first time they matter) and which are new here. */
   reveal: Reveal;
+  /** Numeric changes since the previous scene, drawn as a short pop on the icon. */
+  pops?: MeterPop[];
 }
 
 /**
  * Your status, introduced step by step: a meter appears the first time a scene uses it (marked
  * "New"), the pack only once it holds something, and a status line once it means something.
  */
-export function Hud({ story, session, ui, reveal }: Props) {
+export function Hud({ story, session, ui, reveal, pops = [] }: Props) {
   const { state } = session;
   const inventory = Object.entries(story.flagRules ?? {}).filter(
     ([field, rule]) => rule.hud === 'inventory' && state[field] === true && conditionsPass(rule.hudWhen, state),
@@ -43,13 +51,20 @@ export function Hud({ story, session, ui, reveal }: Props) {
               style={{ ['--level' as string]: String(level) }}
             >
               <span className="meter-glyph" aria-hidden="true">
-                {rule.icon && <img className="meter-icon" src={artUrl(rule.icon)} alt="" width={44} height={44} />}
+                {rule.icon && <img className="meter-icon" src={artUrl(rule.icon)} alt="" width={32} height={32} />}
                 <span className="meter-fill" />
                 {low && <span className="meter-crack" />}
+                {pops
+                  .filter((pop) => pop.field === field)
+                  .map((pop) => (
+                    <span key={pop.id} className={`delta-pop${pop.delta > 0 ? ' up' : ' down'}`}>
+                      {pop.delta > 0 ? `+${pop.delta}` : `−${Math.abs(pop.delta)}`}
+                    </span>
+                  ))}
               </span>
-              <span className="meter-label">
+              <span className="meter-label sr">
                 {rule.label}
-                {fresh && <span className="new-badge">{ui.newBadge}</span>}
+                {fresh && <span className="sr">{ui.newBadge}</span>}
               </span>
               <span className="meter-bar">
                 <span className="pips" aria-hidden="true">
@@ -72,7 +87,7 @@ export function Hud({ story, session, ui, reveal }: Props) {
       {inventory.length > 0 && (
         <div className="hud-lines">
           <div className="pack">
-            <span className="pack-label">{ui.pack}</span>
+            <span className="pack-label sr">{ui.pack}</span>
             <ul className="pack-items">
               {inventory.map(([field, rule]) => (
                 <li key={field} className="pack-item">

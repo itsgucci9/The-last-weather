@@ -35,16 +35,25 @@ function RiskMark({ lethal }: { lethal: boolean }) {
   );
 }
 
+function factNumber(text: string, kind: 'costs' | 'gains'): string {
+  const match = text.match(/^[+−-]?\d+/);
+  if (!match) return '';
+  const raw = match[0].replace('-', '−');
+  if (kind === 'costs' && !raw.startsWith('−') && !raw.startsWith('+')) return `−${raw}`;
+  return raw;
+}
+
 function Facts({ label, facts, kind }: { label: string; facts: Fact[]; kind: 'costs' | 'gains' }) {
   if (!facts.length) return null;
   return (
     <span className={`fact-row fact-${kind}`}>
-      <span className="fact-label">{label}</span>
+      <span className="fact-label sr">{label}</span>
       <span className="fact-items">
         {facts.map((f) => (
           <span key={f.text} className="fact-item">
             {f.icon && <img src={artUrl(f.icon)} alt="" width={16} height={16} />}
-            {f.text}
+            {factNumber(f.text, kind) && <span className="fact-num">{factNumber(f.text, kind)}</span>}
+            <span className="sr">{f.text}</span>
           </span>
         ))}
       </span>
@@ -102,7 +111,7 @@ export function Choices({ story, state, views, ui, armed, onActivate }: Props) {
             {risk && (
               <span className={`choice-risk risk-${risk.kind}`}>
                 <RiskMark lethal={lethal} />
-                <span className="fact-label">{lethal ? ui.lethalTag : ui.shelterTag}</span>
+                <span className="fact-label sr">{lethal ? ui.lethalTag : ui.shelterTag}</span>
                 <span className="risk-detail">{describeRisk(ui, risk)}</span>
               </span>
             )}
@@ -113,7 +122,7 @@ export function Choices({ story, state, views, ui, armed, onActivate }: Props) {
             )}
             {!available && (
               <span className="choice-needs">
-                <span className="fact-label">{ui.needsLabel}</span>
+                <span className="fact-label sr">{ui.needsLabel}</span>
                 <span>{needs}</span>
               </span>
             )}
@@ -125,13 +134,13 @@ export function Choices({ story, state, views, ui, armed, onActivate }: Props) {
 
   return (
     <section className="choices" aria-labelledby="choices-heading" data-tour="choices">
-      <h3 id="choices-heading" className="eyebrow">
+      <h3 id="choices-heading" className="eyebrow sr">
         {ui.choicesHeading}
       </h3>
       <ol className="choice-list">{open.map((view, i) => card(view, i + 1))}</ol>
       {locked.length > 0 && (
         <>
-          <h4 className="eyebrow unavailable-heading">{ui.unavailableHeading}</h4>
+          <h4 className="eyebrow unavailable-heading sr">{ui.unavailableHeading}</h4>
           <ul className="choice-list choice-list-locked">{locked.map((view) => card(view))}</ul>
         </>
       )}

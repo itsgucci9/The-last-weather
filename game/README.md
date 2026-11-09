@@ -1,4 +1,4 @@
-# The Last Weather — v0.6
+# The Last Weather — v0.7
 
 A survival story in four chapters: crash on Vesper-6, beat the storm (or die trying), find the relay that kept the weather for 31 years, and choose a way home. No dice: every outcome follows from your choices and is shown before you commit.
 Built with **React + TypeScript + Vite**, packaged for **Android and iOS with Capacitor**.
@@ -22,7 +22,7 @@ npm run preview    # serve dist/ locally
 | Command | What it checks |
 |---|---|
 | `npm run validate` | Story data, art and translations, then simulates **every** possible run (9,702 runs, 14,364 situations): no dead ends, nothing stuck, every ending, death and forced shelter reachable. Prints how often each outcome happens and where deaths occur. |
-| `npm test` | 47 tests: survival thresholds, Storm Clock countdown, forced shelter, death-state locking, restart, preview equals result for every Vesper-6 choice, saves, translations; which meters show when; the first-sentence split; and a length limit on dialogue (no MICA line over 25 words). |
+| `npm test` | 48 tests: survival thresholds, Storm Clock countdown, forced shelter, death-state locking, restart, preview equals result for every Vesper-6 choice, saves, translations; which meters show when; the short opening line; and a length limit on dialogue (no MICA line over 25 words). |
 | `npm run qa` | Headless Chrome: Vesper-6 runs and a covering set of full runs through the real interface; the first-scene hint (no tour); the lethal two-tap confirm; phone and desktop layouts; keyboard play; 5 languages; offline, updates, sharing, sound, crash screen. Needs Chrome (set `CHROME_PATH` if not found). |
 | `npm run check` | All of the above plus the type-checked build. Run it before every release. |
 
@@ -32,8 +32,8 @@ Read the scene, check the status panel, pick a choice. Number keys pick a choice
 
 ### Learning as you go
 
-- **Play the first scene.** There is no tour. A first run shows one line — "Tap a choice. Watch the meters." — and the choices work immediately. The hint goes away when you choose, and it does not come back.
-- **One beat of story.** Each passage shows its first sentence. **More** reveals the rest.
+- **Play the first scene.** There is no tour and no caption. The choices pulse until the first tap, then that hint is gone.
+- **One short line of story.** The opening line is a few words. **More** reveals the rest. What a choice did shows up on the meters, not in a “last action” box.
 - **The game starts small.** The first screen shows only the three meters the first decision uses, as icons that fill and crack. Suit and Salvage appear when a choice first touches them, marked **New**.
 - **The picture carries the weather.** Dust on the scene thickens as the Storm Clock falls, and a storm bank closes in when time runs out.
 - **Menu → First hint → Show the first hint again:** the hint plays on your next new game.

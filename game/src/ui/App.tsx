@@ -21,12 +21,11 @@ import { KEYS, readJson, remove, storageAvailable, writeJson } from '../storage'
 import { onUpdateReady } from '../pwa';
 import { Choices, orderViews } from './Choices';
 import { DeathLog } from './DeathLog';
-import { outcomeFacts, type Fact } from './describe';
 import { placeKind, revealMeters } from './guide';
 import { EndingLog } from './EndingLog';
 import { EndingsGallery } from './EndingsGallery';
 import { FieldLog } from './FieldLog';
-import { Hud } from './Hud';
+import { Hud, type MeterPop } from './Hud';
 import { Narrative } from './Narrative';
 import { SettingsDialog, type TextSize } from './SettingsDialog';
 
@@ -165,6 +164,24 @@ export function App() {
   const tourActive = !tutorial.tourDone && screen === 'game' && !!run && run.session.history.length === 0 && run.session.sceneId === story.initialScene;
   const tourShown = useRef(false);
   if (tourActive) tourShown.current = true;
+  const [pops, setPops] = useState<MeterPop[]>([]);
+  const meterSeen = useRef<Record<string, number>>({});
+  const popSerial = useRef(0);
+  useEffect(() => {
+    if (!run) return;
+    const born: MeterPop[] = [];
+    for (const field of Object.keys(story.stateRules)) {
+      const value = run.session.state[field];
+      if (typeof value !== 'number') continue;
+      const before = meterSeen.current[field];
+      if (typeof before === 'number' && before !== value) {
+        popSerial.current += 1;
+        born.push({ id: popSerial.current, field, delta: value - before });
+      }
+      meterSeen.current[field] = value;
+    }
+    setPops(born);
+  }, [run, story]);
 
   // Move focus to the new scene heading so keyboard and screen-reader users start at the new text.
   const sceneId = run?.session.sceneId;
@@ -296,7 +313,6 @@ export function App() {
             <img src={artUrl('scene-impact.svg')} alt={artAlt('scene-impact.svg', settings.lang)} width={320} height={180} />
           </figure>
           <h1 className="game-title">{baseStory.title}</h1>
-          <p className="tagline">{ui.tagline}</p>
 
           {/* Not a <form>: sandboxed frames (game portals, embeds) block form submission outright. */}
           <div className="title-form">
@@ -311,7 +327,6 @@ export function App() {
                 autoComplete="off"
                 autoCapitalize="characters"
                 spellCheck={false}
-                aria-describedby="callsign-hint"
                 onChange={(e) => setCallsignDraft(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
@@ -320,9 +335,6 @@ export function App() {
                   }
                 }}
               />
-              <span id="callsign-hint" className="field-hint">
-                {ui.callsignHint}
-              </span>
             </label>
 
             <div className="title-actions">
@@ -375,10 +387,6 @@ export function App() {
 
   const { session } = run;
   const outcome = session.lastOutcome;
-  const outcomeChoice = outcome
-    ? story.scenes.find((s) => s.id === outcome.fromSceneId)?.choices?.find((c) => c.id === outcome.choiceId)
-    : undefined;
-  const facts = outcome ? outcomeFacts(story, outcome.items) : { spent: [], gained: [] };
   const place = placeKind(story, session);
   // First scene of a chapter in this run: show the chapter's title card.
   const previous = session.history[session.history.length - 1];
@@ -387,20 +395,7 @@ export function App() {
   const dead = isDeath(scene);
   const deathAt = dead && outcome?.death ? story.scenes.find((s) => s.id === outcome.death!.at) : undefined;
   const shown = deathAt ?? scene;
-  const factList = (label: string, list: Fact[], kind: string) =>
-    list.length > 0 && (
-      <span className={`fact-row fact-${kind}`}>
-        <span className="fact-label">{label}</span>
-        <span className="fact-items">
-          {list.map((f) => (
-            <span key={f.text} className="fact-item">
-              {f.icon && <img src={artUrl(f.icon)} alt="" width={16} height={16} />}
-              {f.text}
-            </span>
-          ))}
-        </span>
-      </span>
-    );
+  const airLow = typeof session.state.oxygen === 'number' && session.state.oxygen <= (story.stateRules.oxygen?.warnAt ?? 1);
   const restartThisChapter = () => {
     setRun((current) => {
       const restarted = current && restartChapter(story, current.session);
@@ -417,12 +412,6 @@ export function App() {
     <div className={`app${tourActive ? ' is-learning' : ''}`}>
       {updateBanner}
       <header className="topbar">
-        <div className="topbar-text">
-          <h1 className="brand">{baseStory.title}</h1>
-          <span className="where">
-            {[chapter ? fill(ui.chapter, { n: chapterNo }) : null, shown.location].filter(Boolean).join(' · ')}
-          </span>
-        </div>
         {ambience.supported && (
           <button
             type="button"
@@ -440,8 +429,8 @@ export function App() {
             <SoundIcon on={settings.sound} />
           </button>
         )}
-        <button type="button" className="btn btn-small menu-button" onClick={() => setMenuOpen(true)} aria-haspopup="dialog">
-          {ui.menu}
+        <button type="button" className="btn btn-small icon-button menu-button" onClick={() => setMenuOpen(true)} aria-haspopup="dialog" aria-label={ui.menu}>
+          <MenuIcon />
         </button>
       </header>
 
@@ -450,55 +439,43 @@ export function App() {
           <figure
             className={`art-frame${dead ? ' is-dead' : ''}`}
             data-weather={weather}
+            data-air={airLow ? 'low' : 'ok'}
             key={`${shown.art}${dead ? '-dead' : ''}`}
           >
             <img src={artUrl(shown.art)} alt={artAlt(shown.art, settings.lang)} width={320} height={180} />
             <Weather level={weather} />
           </figure>
           <div className="hud-slot hud-slot-side">
-            <Hud story={story} session={session} ui={ui} reveal={reveal} />
+            <Hud story={story} session={session} ui={ui} reveal={reveal} pops={pops} />
           </div>
         </div>
 
         <div className="col-story" key={scene.id}>
-          {/* Phones: meters sit on the picture, before any text. Wide screens use the copy under the art. */}
           <div className="hud-slot hud-slot-inline">
-            <Hud story={story} session={session} ui={ui} reveal={reveal} />
+            <Hud story={story} session={session} ui={ui} reveal={reveal} pops={pops} />
           </div>
-          {outcome && outcomeChoice && (
-            <p className="outcome" id="last-outcome">
-              <span className="eyebrow">{ui.lastAction}</span>
-              <span className="outcome-choice">{outcomeChoice.label}</span>
-              {facts.spent.length + facts.gained.length === 0 ? (
-                <span className="fact-row">
-                  <span className="fact-items">{ui.noChange}</span>
-                </span>
-              ) : (
-                <>
-                  {factList(ui.spent, facts.spent, 'costs')}
-                  {factList(ui.gained, facts.gained, 'gains')}
-                </>
-              )}
-              {outcome.shelter && <span className="outcome-note">{outcome.shelter === 'storm' ? ui.forcedShelter : ui.stuckShelter}</span>}
+          {outcome?.shelter && (
+            <p className="shelter-flash" data-shelter={outcome.shelter} role="status">
+              <PlaceIcon kind="sealed" />
+              <span className="sr">{outcome.shelter === 'storm' ? ui.forcedShelter : ui.stuckShelter}</span>
             </p>
           )}
 
           {chapterStart && chapter && !scene.chapterEnd && chapter.title !== scene.title && (
             <p className="chapter-card">
-              <span className="eyebrow">{fill(ui.chapterOf, { n: chapterNo, total: story.chapters?.length ?? 1 })}</span>
               <span className="chapter-card-title">{chapter.title}</span>
             </p>
           )}
           {scene.ending && <p className="eyebrow scene-eyebrow">{ui.ending}</p>}
           {dead && <p className="eyebrow scene-eyebrow death-eyebrow">{ui.youDied}</p>}
           {scene.chapterEnd && <p className="eyebrow scene-eyebrow chapter-complete">{fill(ui.chapterComplete, { n: chapterNo })}</p>}
-          <h2 className="scene-title" tabIndex={-1} ref={headingRef} aria-describedby={outcome && outcomeChoice ? 'last-outcome' : undefined}>
+          <h1 className="scene-title" tabIndex={-1} ref={headingRef}>
             {scene.title}
-          </h2>
+          </h1>
           {place && (
             <p className={`place place-${place}`} data-place={place}>
               <PlaceIcon kind={place} />
-              <span>{place === 'sealed' ? ui.placeSealed : place === 'storm' ? ui.placeStorm : ui.placeExposed}</span>
+              <span className="sr">{place === 'sealed' ? ui.placeSealed : place === 'storm' ? ui.placeStorm : ui.placeExposed}</span>
             </p>
           )}
           <Narrative scene={scene} state={session.state} callsign={callsign} ui={ui} />
@@ -535,11 +512,7 @@ export function App() {
                   <FieldLog story={story} state={session.state} ui={ui} chapterId={scene.chapter} />
                 </section>
               )}
-              {tourActive && (
-                <p className="coach" data-coach="play">
-                  {ui.coachPlay}
-                </p>
-              )}
+              {tourActive && <div className="coach" data-coach="play" aria-hidden="true" />}
               <Choices story={story} state={session.state} views={views} ui={ui} armed={armed} onActivate={activate} />
               <p className="key-hint">{fill(ui.keyHint, { n: orderViews(views).open.length })}</p>
             </>
@@ -548,6 +521,16 @@ export function App() {
       </main>
       {settingsDialog}
     </div>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 10 10" shapeRendering="crispEdges" aria-hidden="true" fill="currentColor">
+      <rect x="1" y="2" width="8" height="1" />
+      <rect x="1" y="5" width="8" height="1" />
+      <rect x="1" y="8" width="8" height="1" />
+    </svg>
   );
 }
 

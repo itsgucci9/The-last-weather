@@ -148,15 +148,27 @@ export function outcomeChips(story: Story, items: OutcomeItem[]): Chip[] {
   });
 }
 
+/** Opening line length. Longer sentences continue behind More. */
+const LEAD_WORDS = 6;
+
 /**
- * The first sentence stays on screen. Everything after it is the rest of the passage,
- * shown only when the player asks. One sentence (or a line with no break) has no rest.
+ * A few words stay on screen. The rest of the sentence, and every sentence after it,
+ * waits behind More.
  */
 export function beats(text: string): { lead: string; rest: string } {
   const trimmed = text.trim();
-  const match = trimmed.match(/^([\s\S]+?[.!?])(?:\s+)([\s\S]+)$/);
-  if (!match) return { lead: trimmed, rest: '' };
-  return { lead: match[1].trim(), rest: match[2].trim() };
+  const sentence = trimmed.match(/^([\s\S]+?[.!?…])(?:\s+)([\s\S]+)$/);
+  let lead = (sentence ? sentence[1] : trimmed).trim();
+  let rest = (sentence ? sentence[2] : '').trim();
+  const words = lead.replace(/[.!?…]+$/, '').split(/\s+/).filter(Boolean);
+  if (words.length > LEAD_WORDS) {
+    const head = words.slice(0, LEAD_WORDS).join(' ');
+    const tail = words.slice(LEAD_WORDS).join(' ');
+    const end = lead.match(/[.!?…]+$/)?.[0] ?? '';
+    lead = `${head}…`;
+    rest = [tail + (end && end !== '…' ? end : ''), rest].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+  }
+  return { lead, rest };
 }
 
 export type Segment = { kind: 'narration' | 'speech'; text: string };
