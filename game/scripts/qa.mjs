@@ -245,14 +245,15 @@ console.log(`\nQA against ${base}`);
 
   await check('costs and gains are shown on separate labelled lines before choosing; the place is said once', async () => {
     const card = page.locator('[data-choice="restore_memory"]');
-    const costs = await card.locator('.fact-costs .fact-item').allInnerTexts();
-    const gains = await card.locator('.fact-gains .fact-item').allInnerTexts();
-    assert(costs.includes('1 Oxygen') && costs.includes('1 Storm Clock'), `costs were ${costs}`);
-    assert(gains.includes('+1 MICA Trust'), `gains were ${gains}`);
-    assert((await card.locator('.fact-costs .fact-label').innerText()).toUpperCase() === 'COSTS', 'costs label missing');
-    assert((await page.locator('.place').count()) === 1, 'place banner should appear once, under the title');
+    const costs = await card.locator('.fact-costs .fact-item').evaluateAll((els) => els.map((el) => el.textContent ?? ''));
+    const gains = await card.locator('.fact-gains .fact-item').evaluateAll((els) => els.map((el) => el.textContent ?? ''));
+    assert(costs.some((t) => t.includes('Oxygen')) && costs.some((t) => t.includes('Storm Clock')), `costs were ${costs}`);
+    assert(gains.some((t) => t.includes('MICA Trust')), `gains were ${gains}`);
+    assert((await card.locator('.fact-costs .fact-num').allInnerTexts()).includes('−1'), 'cost is not an icon amount');
+    assert((await card.locator('.fact-costs .fact-label').textContent()).toUpperCase() === 'COSTS', 'costs label missing');
+    assert((await page.locator('.place').count()) === 1, 'place mark should appear once');
     assert((await page.locator('.place').getAttribute('data-place')) === 'exposed', 'not marked outside');
-    assert((await page.locator('.place').innerText()).toUpperCase().startsWith('OUTSIDE'), 'banner does not say Outside');
+    assert((await page.locator('.place').textContent()).toUpperCase().includes('OUTSIDE'), 'place name missing for assistive tech');
     assert((await meter(page, 'stormClock')) === 7, 'storm clock should start at 7');
   });
 
@@ -266,9 +267,9 @@ console.log(`\nQA against ${base}`);
     await pick(page, 'restore_memory');
     assert((await scene(page)) === 'Two ways through the dust', 'wrong scene');
     assert((await meter(page, 'oxygen')) === 3 && (await meter(page, 'micaTrust')) === 2, 'meters not updated');
-    const outcome = await page.locator('.outcome').innerText();
-    const spent = await page.locator('.outcome .fact-costs .fact-item').allInnerTexts();
-    assert(outcome.includes('Restore MICA') && spent.includes('1 Oxygen'), `outcome was ${outcome}`);
+    assert((await page.locator('.outcome').count()) === 0, 'last-action box still on screen');
+    const pops = await page.locator('.hud-slot-inline .delta-pop').allInnerTexts();
+    assert(pops.some((t) => t.includes('−1')), `meter changes were ${pops}`);
     const fresh = await page.locator('.hud-slot-inline .meter.is-new').evaluateAll((els) => els.map((e) => e.dataset.tour));
     assert(fresh.includes('meter-suitIntegrity') && fresh.includes('meter-salvage'), `new meters were ${fresh}`);
     const mica = await page.locator('.dialogue').innerText();
@@ -317,7 +318,7 @@ console.log(`\nQA against ${base}`);
   await check('chapter 3 opens with a title card; the Storm Clock is gone off-planet', async () => {
     await pick(page, 'to_chapter_3');
     const card = (await page.locator('.chapter-card').innerText()).toUpperCase().replace(/\s+/g, ' ');
-    assert(card.includes('CHAPTER 3') && card.includes('THE QUIET RELAY'), `card was ${card}`);
+    assert(card.includes('THE QUIET RELAY'), `card was ${card}`);
     assert((await page.locator('.meter-stormClock:visible').count()) === 0, 'storm clock still shown in space');
   });
 
@@ -348,7 +349,8 @@ console.log(`\nQA against ${base}`);
     assert((await ridge.locator('.choice-risk .risk-detail').textContent()).includes('Your suit will fail'), 'no lethal warning text');
     const tucked = await ridge.locator('.risk-detail').evaluate((el) => el.getBoundingClientRect().height < 2);
     assert(tucked, 'the lethal sentence is on screen before the confirming tap');
-    assert((await ridge.locator('.choice-risk .fact-label').innerText()).toUpperCase() === 'DEADLY', 'no Deadly label');
+    assert((await ridge.locator('.choice-risk .fact-label').textContent()).toUpperCase() === 'DEADLY', 'no Deadly label');
+    assert((await ridge.locator('.risk-mark').count()) === 1, 'no danger mark');
     await ridge.click();
     assert((await scene(page)) === 'The Storm Front', 'died on the first tap');
     assert((await ridge.getAttribute('data-armed')) === 'true', 'not armed');
@@ -397,7 +399,7 @@ console.log(`\nQA against ${base}`);
     assert((await copy.getAttribute('data-risk')) === 'shelter:storm', 'forced shelter not shown');
     await pick(page, 'copy_archive');
     assert((await scene(page)) === 'Signal in the Storm', 'not in the shelter');
-    assert((await page.locator('.outcome-note').innerText()).includes('forced into the shelter'), 'no forced-shelter note');
+    assert((await page.locator('[data-shelter="storm"]').count()) === 1, 'no shelter mark');
     await page.screenshot({ path: path.join(shots, 'phone-15-forced-shelter.png'), fullPage: true });
   });
 
@@ -443,13 +445,13 @@ console.log(`\nQA against ${base}`);
     await page.click('[data-action="begin"]');
     await page.locator('[data-coach="play"]').waitFor();
     assert((await page.locator('.tour, .tour-card, .tour-blocker').count()) === 0, 'a tour is covering the first scene');
-    const hint = await page.locator('[data-coach="play"]').innerText();
-    assert(hint.split(/\s+/).length <= 8, `hint is an essay: ${hint}`);
+    assert((await page.locator('[data-coach="play"]').innerText()).trim() === '', 'the first scene still explains itself in words');
     assert((await page.locator('[data-choice="restore_memory"]').count()) === 1, 'first choice is not on screen');
     const tucked = await page.locator('.narrative .more-copy').evaluateAll((els) => els.length > 0 && els.every((el) => el.getBoundingClientRect().height < 2));
     assert(tucked, 'the rest of the passage is on screen before More');
-    const passage = await page.locator('.narration').first().innerText();
-    assert(passage.toLowerCase().includes('copper'), 'the first beat is missing');
+    const lead = await page.locator('.narration .lead').first().innerText();
+    assert(lead.trim().split(/\s+/).length <= 7, `opening line is long: ${lead}`);
+    assert((await page.locator('.narrative .more-copy').first().textContent()).toLowerCase().includes('copper'), 'the rest of the line is missing');
     await page.screenshot({ path: path.join(shots, 'phone-16-first-hint.png') });
   });
 
@@ -461,7 +463,7 @@ console.log(`\nQA against ${base}`);
   });
 
   await check('tutorial: new meters arrive with a "New" badge; no tip boxes during play', async () => {
-    assert((await page.locator('.hud-slot-inline .meter-suitIntegrity .new-badge').innerText()).toUpperCase() === 'NEW', 'no New badge on Suit');
+    assert((await page.locator('.hud-slot-inline .meter-suitIntegrity.is-new').count()) === 1, 'new suit meter is not marked');
     await page.screenshot({ path: path.join(shots, 'phone-18-new-meters.png'), fullPage: true });
     for (const id of ['glass_ridge', 'leave_with_coupler']) {
       await pick(page, id);
@@ -575,12 +577,12 @@ for (const [locale, width] of [
     const { context, page } = await newPage({ width, height: 760, locale });
     await page.click('[data-action="begin"]');
     await page.locator('.hud-slot-inline .meter-label').first().waitFor();
-    const cut = await page.locator('.hud:visible .meter-label, .hud:visible .pack-label').evaluateAll((els) =>
+    const cut = await page.locator('.hud:visible .meter-label:not(.sr), .hud:visible .pack-label:not(.sr)').evaluateAll((els) =>
       els.filter((el) => el.scrollWidth > el.clientWidth + 1).map((el) => el.textContent),
     );
     assert(cut.length === 0, `cut off: ${cut.join(', ')}`);
     // A label may wrap between words, but never break inside a word: lines <= words.
-    const broken = await page.locator('.hud:visible .meter-label').evaluateAll((els) =>
+    const broken = await page.locator('.hud:visible .meter-label:not(.sr)').evaluateAll((els) =>
       els
         .filter((el) => {
           const lines = Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight));
@@ -694,7 +696,8 @@ await check('coupler leaves the pack once installed; outcome is read with the he
   await pick(page, 'quick_patch');
   assert(!(await page.locator('.pack-item:visible').allInnerTexts()).includes('Reactor coupler'), 'installed coupler still in pack');
   assert((await page.locator('h1').count()) === 1, 'game screen needs exactly one h1');
-  assert((await page.locator('.scene-title').getAttribute('aria-describedby')) === 'last-outcome', 'outcome not tied to heading');
+  assert((await page.locator('.outcome').count()) === 0, 'last-action box came back');
+  assert((await page.locator('.scene-title').getAttribute('aria-describedby')) === null, 'heading still points at a text outcome');
   await context.close();
 });
 

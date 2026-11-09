@@ -27,7 +27,7 @@ function Beat({ text, open }: { text: string; open: boolean }) {
   const { lead, rest } = beats(text);
   return (
     <>
-      {keepTogether(lead)}
+      <span className="lead">{keepTogether(lead)}</span>
       {rest && (
         <span className={open ? 'more-copy is-open' : 'more-copy'}>
           {' '}

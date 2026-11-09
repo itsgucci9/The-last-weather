@@ -95,6 +95,12 @@ describe('first-run hint', () => {
     });
     expect(beats('Only this.')).toEqual({ lead: 'Only this.', rest: '' });
   });
+
+  it('shortens a long opening sentence to a few words', () => {
+    const { lead, rest } = beats('The storm has turned the horizon the color of old copper. Your ship lies split.');
+    expect(lead.split(/\s+/).length).toBeLessThanOrEqual(6);
+    expect(rest.toLowerCase()).toContain('copper');
+  });
 });
 
 describe('MICA keeps it short', () => {
