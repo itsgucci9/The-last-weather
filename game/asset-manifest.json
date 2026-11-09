@@ -1,0 +1,103 @@
+{
+  "format": "SVG",
+  "visualStyle": "Original pixel-style vector art with crisp edges and a restrained sci-fi survival palette.",
+  "scenes": [
+    {
+      "file": "assets/scene-impact.svg",
+      "size": "320x180",
+      "alt": "A damaged survey ship lies in a dark, rust-colored basin beneath distant electrical clouds."
+    },
+    {
+      "file": "assets/scene-glass-ridge.svg",
+      "size": "320x180",
+      "alt": "A narrow route crosses a sharp glass ridge toward a distant weather station."
+    },
+    {
+      "file": "assets/scene-dry-ravine.svg",
+      "size": "320x180",
+      "alt": "A sheltered dry ravine cuts through blocky ochre cliffs with a small cyan filter cache."
+    },
+    {
+      "file": "assets/scene-weather-station.svg",
+      "size": "320x180",
+      "alt": "An abandoned weather station glows with one cyan signal light on the empty plain."
+    },
+    {
+      "file": "assets/scene-storm-trench.svg",
+      "size": "320x180",
+      "alt": "A low maintenance trench offers shelter from a wall of blue-white electrical storm clouds."
+    },
+    {
+      "file": "assets/scene-launch.svg",
+      "size": "320x180",
+      "alt": "The repaired survey ship rises from the planet as a blue engine plume cuts through the storm."
+    },
+    {
+      "file": "assets/scene-orbit-drift.svg",
+      "size": "320x180",
+      "alt": "The survey ship drifts in low orbit above Vesper-6, sparks trailing from a breach in its hull."
+    },
+    {
+      "file": "assets/scene-moon-relay.svg",
+      "size": "320x180",
+      "alt": "A small grey moon ringed with debris, a cyan beacon blinking on its dark side."
+    },
+    {
+      "file": "assets/scene-relay-dock.svg",
+      "size": "320x180",
+      "alt": "A squat relay tower with solar vanes on black rock, one cyan window lit."
+    },
+    {
+      "file": "assets/scene-relay-core.svg",
+      "size": "320x180",
+      "alt": "A pilot faces a large console whose screen shows a face with one amber eye and one cyan eye."
+    },
+    {
+      "file": "assets/scene-home-vector.svg",
+      "size": "320x180",
+      "alt": "A cockpit view of space and dust, the navigation display showing three courses."
+    },
+    {
+      "file": "assets/scene-debris-field.svg",
+      "size": "320x180",
+      "alt": "The survey ship at the edge of a grey haze of rock and ice."
+    },
+    {
+      "file": "assets/scene-depot.svg",
+      "size": "320x180",
+      "alt": "A small outpost with a dish antenna on an asteroid, under a dim sun."
+    },
+    {
+      "file": "assets/scene-halcyon.svg",
+      "size": "320x180",
+      "alt": "A rust-colored mining tug with a broken cargo arm drifts in grey dust beside the survey ship."
+    },
+    {
+      "file": "assets/scene-known-space.svg",
+      "size": "320x180",
+      "alt": "Green navigation beacons lead toward a ring station and a blue-green planet."
+    }
+  ],
+  "icons": [
+    {
+      "file": "assets/icon-oxygen.svg",
+      "alt": "Pixel-art oxygen canister icon."
+    },
+    {
+      "file": "assets/icon-suit.svg",
+      "alt": "Pixel-art protective suit shield icon."
+    },
+    {
+      "file": "assets/icon-salvage.svg",
+      "alt": "Pixel-art reactor coupler and salvage icon."
+    },
+    {
+      "file": "assets/icon-mica.svg",
+      "alt": "Pixel-art cyan AI status display icon."
+    },
+    {
+      "file": "assets/icon-storm.svg",
+      "alt": "Pixel-art storm cloud with a cyan lightning bolt."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# The Last Weather on Netlify.
+# Cheapest way to publish: build on your computer (npm run build) and deploy the dist/ folder,
+# so Netlify only stores files and never runs a build. Headers live in public/_headers.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

@@ -1,0 +1,2550 @@
+{
+  "schemaVersion": 1,
+  "title": "The Last Weather",
+  "assetRoot": "assets/",
+  "initialScene": "impact",
+  "chapters": [
+    {
+      "id": "ch1",
+      "title": "Impact"
+    },
+    {
+      "id": "ch2",
+      "title": "The Last Weather"
+    },
+    {
+      "id": "ch3",
+      "title": "The Quiet Relay"
+    },
+    {
+      "id": "ch4",
+      "title": "Home Vector"
+    }
+  ],
+  "initialState": {
+    "oxygen": 4,
+    "suitIntegrity": 3,
+    "salvage": 0,
+    "micaTrust": 1,
+    "memoryRestored": false,
+    "hasFilter": false,
+    "forecastSaved": false,
+    "couplerFound": false,
+    "shipReady": false,
+    "shipDamaged": false,
+    "repairMode": "none",
+    "route": "none",
+    "stormRoute": "none",
+    "escape": "none",
+    "approach": "none",
+    "keeperFate": "none",
+    "halcyonRescued": false,
+    "halcyonMarked": false,
+    "stormClock": 7
+  },
+  "stateRules": {
+    "oxygen": {
+      "min": 0,
+      "max": 6,
+      "label": "Oxygen",
+      "icon": "icon-oxygen.svg",
+      "warnAt": 1,
+      "lethal": "asphyxiation"
+    },
+    "suitIntegrity": {
+      "min": 0,
+      "max": 3,
+      "label": "Suit",
+      "icon": "icon-suit.svg",
+      "warnAt": 1,
+      "lethal": "suit_breach"
+    },
+    "salvage": {
+      "min": 0,
+      "max": 4,
+      "label": "Salvage",
+      "icon": "icon-salvage.svg",
+      "spend": true
+    },
+    "micaTrust": {
+      "min": 0,
+      "max": 3,
+      "label": "MICA Trust",
+      "icon": "icon-mica.svg"
+    },
+    "stormClock": {
+      "min": 0,
+      "max": 7,
+      "label": "Storm Clock",
+      "icon": "icon-storm.svg",
+      "warnAt": 2,
+      "clock": {
+        "cause": "storm",
+        "activeWhen": {
+          "all": [
+            {
+              "field": "escape",
+              "op": "eq",
+              "value": "none"
+            }
+          ]
+        }
+      },
+      "hudWhen": {
+        "all": [
+          {
+            "field": "escape",
+            "op": "eq",
+            "value": "none"
+          }
+        ]
+      }
+    }
+  },
+  "flagRules": {
+    "memoryRestored": {
+      "label": "MICA flight memory",
+      "values": {
+        "true": "Restored",
+        "false": "Fragmented"
+      },
+      "hud": "status",
+      "log": true
+    },
+    "couplerFound": {
+      "label": "Reactor coupler",
+      "hud": "inventory",
+      "hudWhen": {
+        "any": [
+          {
+            "field": "repairMode",
+            "op": "eq",
+            "value": "none"
+          },
+          {
+            "field": "repairMode",
+            "op": "eq",
+            "value": "abandoned"
+          }
+        ]
+      }
+    },
+    "hasFilter": {
+      "label": "Dust filter",
+      "hud": "inventory",
+      "hudWhen": {
+        "all": [
+          {
+            "field": "escape",
+            "op": "eq",
+            "value": "none"
+          }
+        ]
+      }
+    },
+    "forecastSaved": {
+      "label": "Storm forecast",
+      "hud": "inventory",
+      "hudWhen": {
+        "all": [
+          {
+            "field": "escape",
+            "op": "eq",
+            "value": "none"
+          }
+        ]
+      }
+    },
+    "shipReady": {
+      "label": "Ship ready to launch"
+    },
+    "shipDamaged": {
+      "label": "Ship hull",
+      "values": {
+        "true": "Damaged",
+        "false": "Sound"
+      },
+      "hud": "status",
+      "hudWhen": {
+        "any": [
+          {
+            "field": "escape",
+            "op": "eq",
+            "value": "clear"
+          },
+          {
+            "field": "escape",
+            "op": "eq",
+            "value": "hard"
+          },
+          {
+            "field": "escape",
+            "op": "eq",
+            "value": "shelter"
+          }
+        ]
+      },
+      "log": true,
+      "logFrom": "ch3"
+    },
+    "repairMode": {
+      "label": "Repair",
+      "values": {
+        "none": "Not started",
+        "careful": "Careful calibration",
+        "quick": "Quick patch",
+        "abandoned": "Abandoned",
+        "calm": "Finished after the storm"
+      },
+      "log": true
+    },
+    "route": {
+      "label": "Route to the station",
+      "values": {
+        "none": "Not chosen",
+        "ridge": "Glass Ridge",
+        "ravine": "Dry Ravine"
+      },
+      "log": true
+    },
+    "stormRoute": {
+      "label": "Storm crossing",
+      "values": {
+        "none": "Not reached",
+        "trench": "Maintenance trench",
+        "filtered": "Filtered low ground",
+        "exposed": "Exposed ridge"
+      },
+      "log": true
+    },
+    "escape": {
+      "label": "Leaving Vesper-6",
+      "values": {
+        "none": "Not yet",
+        "clear": "Clear Window",
+        "hard": "Hard Burn",
+        "shelter": "After the storm"
+      },
+      "log": true,
+      "logFrom": "ch3"
+    },
+    "approach": {
+      "label": "Approach to the relay",
+      "values": {
+        "none": "Not reached",
+        "direct": "Straight through the ring",
+        "mica": "MICA's path",
+        "long": "The long way around"
+      },
+      "log": true,
+      "logFrom": "ch3"
+    },
+    "keeperFate": {
+      "label": "The keeper",
+      "values": {
+        "none": "Not met",
+        "aboard": "Archive aboard",
+        "running": "Still on watch",
+        "resting": "At rest"
+      },
+      "hud": "status",
+      "hudWhen": {
+        "any": [
+          {
+            "field": "keeperFate",
+            "op": "eq",
+            "value": "aboard"
+          },
+          {
+            "field": "keeperFate",
+            "op": "eq",
+            "value": "running"
+          },
+          {
+            "field": "keeperFate",
+            "op": "eq",
+            "value": "resting"
+          }
+        ]
+      },
+      "log": true,
+      "logFrom": "ch3"
+    },
+    "halcyonRescued": {
+      "label": "The Halcyon's pilot",
+      "values": {
+        "true": "Rescued",
+        "false": "Not rescued"
+      },
+      "log": true,
+      "logFrom": "ch4"
+    }
+  },
+  "conditionOperators": [
+    "eq",
+    "gte",
+    "lte"
+  ],
+  "effectFormat": {
+    "add": "Map of numeric state values to add; clamp values using stateRules.",
+    "set": "Map of state fields to replace."
+  },
+  "scenes": [
+    {
+      "id": "impact",
+      "chapter": "ch1",
+      "title": "Impact",
+      "location": "Crash site",
+      "art": "scene-impact.svg",
+      "ambience": "wind",
+      "speaker": "MICA",
+      "text": "The storm has turned the horizon the color of old copper. Your ship lies split open in the dust. MICA's voice returns through a burst of static: “Coupler fractured. I can restore my flight memory or save the backup cell for your suit. Not both.”",
+      "choices": [
+        {
+          "id": "restore_memory",
+          "label": "Restore MICA's flight memory",
+          "detail": "Lose one oxygen unit. MICA may remember why it chose this landing site.",
+          "effects": {
+            "add": {
+              "oxygen": -1,
+              "micaTrust": 1,
+              "stormClock": -1
+            },
+            "set": {
+              "memoryRestored": true
+            }
+          },
+          "next": "route_choice"
+        },
+        {
+          "id": "save_battery",
+          "label": "Keep the backup cell for life support",
+          "detail": "Gain one oxygen unit. MICA's flight memory stays corrupted.",
+          "effects": {
+            "add": {
+              "oxygen": 1
+            },
+            "set": {
+              "memoryRestored": false
+            }
+          },
+          "next": "route_choice"
+        }
+      ],
+      "exposure": "exposed"
+    },
+    {
+      "id": "route_choice",
+      "chapter": "ch1",
+      "title": "Two ways through the dust",
+      "location": "Western basin",
+      "art": "scene-glass-ridge.svg",
+      "ambience": "wind",
+      "text": "The weather station blinks beyond the basin. The Glass Ridge is exposed but short. The Dry Ravine curves out of sight, where the wind is quieter.",
+      "textVariants": [
+        {
+          "id": "mica_memory",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I chose this basin on purpose, {callsign}. I do not remember why."
+        },
+        {
+          "id": "mica_fragmented",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "Cell secured. I do not know why we are here."
+        }
+      ],
+      "choices": [
+        {
+          "id": "glass_ridge",
+          "label": "Cross the Glass Ridge",
+          "detail": "Quick, but the glass will cut at the suit. Collect useful wreckage on the way.",
+          "art": "scene-glass-ridge.svg",
+          "effects": {
+            "add": {
+              "suitIntegrity": -1,
+              "salvage": 1,
+              "stormClock": -1
+            },
+            "set": {
+              "route": "ridge"
+            }
+          },
+          "next": "weather_station"
+        },
+        {
+          "id": "dry_ravine",
+          "label": "Follow the Dry Ravine",
+          "detail": "Spend one oxygen unit and much more time. Find a filter that will protect your lungs in the storm.",
+          "art": "scene-dry-ravine.svg",
+          "effects": {
+            "add": {
+              "oxygen": -1,
+              "stormClock": -3
+            },
+            "set": {
+              "route": "ravine",
+              "hasFilter": true
+            }
+          },
+          "next": "weather_station"
+        }
+      ],
+      "exposure": "exposed"
+    },
+    {
+      "id": "weather_station",
+      "chapter": "ch2",
+      "title": "The Weather Station",
+      "location": "Station 04",
+      "art": "scene-weather-station.svg",
+      "ambience": "interior",
+      "speaker": "MICA",
+      "text": "Inside the station, a coupler hangs from an emergency rack. It matches your ship. Beneath it, an old forecast archive is still blinking. MICA pauses at the access panel. “I think my flight record is in there.”",
+      "textVariants": [
+        {
+          "id": "via_ridge",
+          "conditions": {
+            "all": [
+              {
+                "field": "route",
+                "op": "eq",
+                "value": "ridge"
+              }
+            ]
+          },
+          "text": "Glass grit still glitters in the scratches on your suit. The ridge was short, but it left its mark."
+        },
+        {
+          "id": "via_ravine",
+          "conditions": {
+            "all": [
+              {
+                "field": "route",
+                "op": "eq",
+                "value": "ravine"
+              }
+            ]
+          },
+          "text": "The dust filter from the ravine cache rides sealed on your belt. The long way cost you air."
+        },
+        {
+          "id": "mica_recognizes",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I was steering us toward this station."
+        },
+        {
+          "id": "storm_close",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormClock",
+                "op": "lte",
+                "value": 2
+              }
+            ]
+          },
+          "text": "The station's storm siren has started to turn. Whatever you do in here, the storm is not waiting for you."
+        }
+      ],
+      "choices": [
+        {
+          "id": "copy_archive",
+          "label": "Copy the forecast and flight record",
+          "detail": "Spend one oxygen unit and a long time at the console. Gain the storm forecast, a repair part, and a clearer memory for MICA.",
+          "effects": {
+            "add": {
+              "oxygen": -1,
+              "salvage": 1,
+              "micaTrust": 1,
+              "stormClock": -3
+            },
+            "set": {
+              "couplerFound": true,
+              "forecastSaved": true,
+              "memoryRestored": true
+            }
+          },
+          "next": "storm_front"
+        },
+        {
+          "id": "leave_with_coupler",
+          "label": "Take the coupler and leave",
+          "detail": "Costs no time. MICA's reason for choosing this landing remains unclear.",
+          "effects": {
+            "add": {
+              "salvage": 1
+            },
+            "set": {
+              "couplerFound": true,
+              "forecastSaved": false
+            }
+          },
+          "next": "storm_front"
+        },
+        {
+          "id": "take_shelter",
+          "label": "Take the coupler and wait out the storm in the shelter",
+          "detail": "Safe. The ship stays on the surface until the storm has passed.",
+          "effects": {
+            "set": {
+              "couplerFound": true,
+              "shipReady": false
+            }
+          },
+          "next": "ending_shelter"
+        }
+      ],
+      "exposure": "sealed",
+      "shelter": "ending_shelter"
+    },
+    {
+      "id": "storm_front",
+      "chapter": "ch2",
+      "title": "The Storm Front",
+      "location": "Approach to the ship",
+      "art": "scene-storm-trench.svg",
+      "ambience": "storm",
+      "speaker": "MICA",
+      "text": "Static crawls over your visor. Beyond the station, the basin disappears behind a wall of blue-white dust. MICA marks a maintenance trench in the rock. “I can get us through. Do you trust my route?”",
+      "textVariants": [
+        {
+          "id": "forecast",
+          "conditions": {
+            "all": [
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "The forecast agrees: the trench stays sheltered."
+        },
+        {
+          "id": "trust_only",
+          "conditions": {
+            "all": [
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": false
+              },
+              {
+                "field": "micaTrust",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "No forecast. Only my reading of the wind."
+        },
+        {
+          "id": "no_basis",
+          "conditions": {
+            "all": [
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": false
+              },
+              {
+                "field": "micaTrust",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "text": "Without the forecast or a clear memory, MICA’s trench is only a guess. You cannot stake the crossing on it."
+        },
+        {
+          "id": "filter_ready",
+          "conditions": {
+            "all": [
+              {
+                "field": "hasFilter",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "The ravine filter is still sealed. It will keep the dust out of your lungs for one crossing."
+        },
+        {
+          "id": "clock_low",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormClock",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "One unit left. The shelter is right behind us."
+        },
+        {
+          "id": "air_low",
+          "conditions": {
+            "all": [
+              {
+                "field": "oxygen",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "text": "Your oxygen reads one. The trench and the ridge both cost air you do not have."
+        }
+      ],
+      "choices": [
+        {
+          "id": "follow_mica",
+          "label": "Follow MICA through the maintenance trench",
+          "detail": "Sheltered but longer: costs air and time. Needs MICA's trust or the station forecast.",
+          "conditions": {
+            "any": [
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": true
+              },
+              {
+                "field": "micaTrust",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "effects": {
+            "set": {
+              "stormRoute": "trench"
+            },
+            "add": {
+              "stormClock": -1,
+              "oxygen": -1
+            }
+          },
+          "next": "repair"
+        },
+        {
+          "id": "use_filter",
+          "label": "Fit the ravine filter and cross the low ground",
+          "detail": "The ravine filter breathes for you on the low ground. Costs time, not air.",
+          "conditions": {
+            "all": [
+              {
+                "field": "hasFilter",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "effects": {
+            "set": {
+              "hasFilter": false,
+              "stormRoute": "filtered"
+            },
+            "add": {
+              "stormClock": -1
+            }
+          },
+          "next": "repair"
+        },
+        {
+          "id": "cross_exposed_ridge",
+          "label": "Take the exposed ridge",
+          "detail": "The fastest way back, but the storm will tear at the suit.",
+          "effects": {
+            "add": {
+              "suitIntegrity": -2,
+              "oxygen": -1
+            },
+            "set": {
+              "stormRoute": "exposed"
+            }
+          },
+          "next": "repair"
+        },
+        {
+          "id": "back_to_shelter",
+          "label": "Turn back to the station shelter",
+          "detail": "A short dash through the first gusts. You give up on launching before the storm.",
+          "exposure": "storm",
+          "effects": {
+            "set": {
+              "shipReady": false
+            }
+          },
+          "next": "ending_shelter"
+        }
+      ],
+      "exposure": "storm"
+    },
+    {
+      "id": "repair",
+      "chapter": "ch2",
+      "title": "One Last Repair",
+      "location": "Crash site",
+      "art": "scene-impact.svg",
+      "ambience": "storm",
+      "text": "The coupler locks into place. The reactor answers with a low, uneven pulse. You have enough salvage to steady the repair, but the storm is already close. A careful calibration will cost time and oxygen. A quick patch may get the ship moving before the sky closes.",
+      "textVariants": [
+        {
+          "id": "after_trench",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormRoute",
+                "op": "eq",
+                "value": "trench"
+              }
+            ]
+          },
+          "text": "The trench held. You reach the ship with the storm still behind you, and MICA counts down the margin in a steady voice."
+        },
+        {
+          "id": "after_filtered",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormRoute",
+                "op": "eq",
+                "value": "filtered"
+              }
+            ]
+          },
+          "text": "The filter clogs and goes dark at the edge of the crash site. It did its job; it will not do it twice."
+        },
+        {
+          "id": "after_exposed",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormRoute",
+                "op": "eq",
+                "value": "exposed"
+              }
+            ]
+          },
+          "text": "The ridge took its toll. Your suit alarms tick in the cold, and every seal is a promise you cannot check."
+        },
+        {
+          "id": "low_air",
+          "conditions": {
+            "all": [
+              {
+                "field": "oxygen",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "text": "Your oxygen reserve is almost gone. A careful calibration would use the last of it."
+        },
+        {
+          "id": "suit_critical",
+          "conditions": {
+            "all": [
+              {
+                "field": "suitIntegrity",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "text": "Suit integrity is critical. Another long walk outside is not an option."
+        },
+        {
+          "id": "clock_low",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormClock",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "text": "The storm wall is already on the ridge. Anything slow out here will finish in the open."
+        }
+      ],
+      "choices": [
+        {
+          "id": "careful_repair",
+          "label": "Calibrate the reactor carefully",
+          "detail": "Spend one oxygen unit and a long stretch outside the hull (needs Suit 2+). Improves the chance of a clean launch.",
+          "conditions": {
+            "all": [
+              {
+                "field": "couplerFound",
+                "op": "eq",
+                "value": true
+              },
+              {
+                "field": "salvage",
+                "op": "gte",
+                "value": 1
+              },
+              {
+                "field": "suitIntegrity",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "oxygen": -1,
+              "salvage": -1,
+              "stormClock": -1
+            },
+            "set": {
+              "shipReady": true,
+              "repairMode": "careful"
+            }
+          },
+          "next": "launch"
+        },
+        {
+          "id": "quick_patch",
+          "label": "Patch it and launch fast",
+          "detail": "Use one salvage unit. The ship will be unstable, but it takes no time.",
+          "conditions": {
+            "all": [
+              {
+                "field": "couplerFound",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "salvage": -1
+            },
+            "set": {
+              "shipReady": true,
+              "repairMode": "quick"
+            }
+          },
+          "next": "launch"
+        },
+        {
+          "id": "shelter",
+          "label": "Abandon the launch attempt and run for the station shelter",
+          "detail": "A short run through the first gusts. Survive the storm and use the station beacon to send a distress signal.",
+          "effects": {
+            "set": {
+              "shipReady": false,
+              "repairMode": "abandoned"
+            }
+          },
+          "next": "ending_shelter",
+          "exposure": "storm"
+        }
+      ],
+      "exposure": "exposed"
+    },
+    {
+      "id": "launch",
+      "chapter": "ch2",
+      "title": "The Launch Window",
+      "location": "Vesper-6 surface",
+      "art": "scene-launch.svg",
+      "ambience": "launch",
+      "text": "The engines shudder. The cloud bank rises over the ridge. MICA watches the readouts, then waits for your decision.",
+      "textVariants": [
+        {
+          "id": "careful",
+          "conditions": {
+            "all": [
+              {
+                "field": "repairMode",
+                "op": "eq",
+                "value": "careful"
+              }
+            ]
+          },
+          "text": "The calibrated reactor holds a steady pulse. Somewhere behind the cloud bank, a clear window is opening."
+        },
+        {
+          "id": "careful_no_basis",
+          "conditions": {
+            "all": [
+              {
+                "field": "repairMode",
+                "op": "eq",
+                "value": "careful"
+              },
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": false
+              },
+              {
+                "field": "micaTrust",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "No forecast. If we wait, we wait blind."
+        },
+        {
+          "id": "quick",
+          "conditions": {
+            "all": [
+              {
+                "field": "repairMode",
+                "op": "eq",
+                "value": "quick"
+              }
+            ]
+          },
+          "text": "The patched reactor stutters under load. Waiting for a clear window is not an option with this repair."
+        },
+        {
+          "id": "out_of_air",
+          "conditions": {
+            "all": [
+              {
+                "field": "oxygen",
+                "op": "lte",
+                "value": 0
+              }
+            ]
+          },
+          "text": "Your suit reserve is empty. You are breathing the ship's thin cabin air now, and it will not last through a long wait."
+        }
+      ],
+      "choices": [
+        {
+          "id": "clear_launch",
+          "label": "Wait for the clear window and launch",
+          "detail": "Requires a careful repair, at least one oxygen unit, MICA's trust or the saved forecast, and time before the storm arrives.",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipReady",
+                "op": "eq",
+                "value": true
+              },
+              {
+                "field": "repairMode",
+                "op": "eq",
+                "value": "careful"
+              },
+              {
+                "field": "oxygen",
+                "op": "gte",
+                "value": 1
+              },
+              {
+                "field": "stormClock",
+                "op": "gte",
+                "value": 1
+              }
+            ],
+            "any": [
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": true
+              },
+              {
+                "field": "micaTrust",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "next": "ending_clear"
+        },
+        {
+          "id": "hard_burn",
+          "label": "Launch now through the storm",
+          "detail": "Escape is possible, but the ship or MICA will pay for the hard burn.",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipReady",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "micaTrust": -1
+            },
+            "set": {
+              "shipDamaged": true
+            }
+          },
+          "next": "ending_hard"
+        },
+        {
+          "id": "stay_sheltered",
+          "label": "Stay below ground and transmit a distress call",
+          "detail": "Available if the ship is not ready to launch.",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipReady",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "next": "ending_shelter",
+          "hideWhenLocked": true
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "ending_clear",
+      "chapter": "ch2",
+      "title": "Clear Window",
+      "location": "Above Vesper-6",
+      "art": "scene-launch.svg",
+      "ambience": "space",
+      "text": "The ship lifts as the first electrical arcs cross the basin. The repaired reactor holds. MICA gives you a quiet confirmation: the course is clear. Vesper-6 falls away beneath the glass of the cockpit. In the recovered signal, a second set of coordinates waits beyond the storm.",
+      "textVariants": [
+        {
+          "id": "reveal",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I remember now. A debris field crossed our orbit, and this station was the only one still listening. I am sorry, {callsign}."
+        }
+      ],
+      "hint": "Be quick, calibrate the reactor carefully, keep some air in reserve, and give MICA a reason to be trusted.",
+      "chapterEnd": true,
+      "choices": [
+        {
+          "id": "to_chapter_3",
+          "label": "Follow the second signal",
+          "detail": "Chapter 3: The Quiet Relay. The ship's recyclers top up your suit.",
+          "effects": {
+            "add": {
+              "oxygen": 2
+            },
+            "set": {
+              "escape": "clear"
+            }
+          },
+          "next": "relay_signal"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "ending_hard",
+      "chapter": "ch2",
+      "title": "Hard Burn",
+      "location": "Upper atmosphere",
+      "art": "scene-launch.svg",
+      "ambience": "launch",
+      "text": "The ship punches through the storm with its alarms still ringing. You are airborne, but the reactor is unstable and MICA's voice breaks into fragments. It remembers enough to stay with you. The weather station's signal continues behind you, unanswered.",
+      "textVariants": [
+        {
+          "id": "careful_strain",
+          "conditions": {
+            "all": [
+              {
+                "field": "repairMode",
+                "op": "eq",
+                "value": "careful"
+              }
+            ]
+          },
+          "text": "Even the careful calibration was never meant for a full burn through the storm."
+        },
+        {
+          "id": "fragments",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "Debris field… I had to bring you down. Stay with me, {callsign}."
+        },
+        {
+          "id": "unknown",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "text": "Whatever made MICA choose Vesper-6 is still locked in the station’s archive, somewhere below the storm."
+        }
+      ],
+      "hint": "Patch the ship, or refuse to wait for the window.",
+      "chapterEnd": true,
+      "choices": [
+        {
+          "id": "to_chapter_3",
+          "label": "Stabilize the ship",
+          "detail": "Chapter 3: The Quiet Relay. The ship's recyclers top up your suit.",
+          "effects": {
+            "add": {
+              "oxygen": 2
+            },
+            "set": {
+              "escape": "hard"
+            }
+          },
+          "next": "hard_drift"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "ending_shelter",
+      "chapter": "ch2",
+      "title": "Signal in the Storm",
+      "location": "Station 04 shelter",
+      "art": "scene-weather-station.svg",
+      "ambience": "shelter",
+      "text": "The shelter seals as the electrical storm rolls over the station. MICA finds a low-power channel and sends a distress call into the static. Your ship is still on the surface, and the signal returns one word from beyond the weather: “Received.”",
+      "textVariants": [
+        {
+          "id": "storm_forced",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormClock",
+                "op": "lte",
+                "value": 0
+              },
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "You lost track of time at the console. When the copy finished, the storm was already at the door."
+        },
+        {
+          "id": "reveal",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "While the storm passes overhead, MICA replays the recovered record: a debris field crossing your old orbit. The landing was not a mistake."
+        },
+        {
+          "id": "unknown",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "After the storm, I copy the archive. I need to know why we are here."
+        }
+      ],
+      "hint": "Not every escape leaves the ground.",
+      "chapterEnd": true,
+      "choices": [
+        {
+          "id": "to_chapter_3",
+          "label": "Wait for morning",
+          "detail": "Chapter 3: The Quiet Relay. The shelter's tanks top up your suit.",
+          "effects": {
+            "add": {
+              "oxygen": 2
+            },
+            "set": {
+              "escape": "shelter"
+            }
+          },
+          "next": "shelter_morning"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "hard_drift",
+      "chapter": "ch3",
+      "title": "Drifting",
+      "location": "Low orbit",
+      "art": "scene-orbit-drift.svg",
+      "ambience": "space",
+      "speaker": "MICA",
+      "text": "The alarms stop, one by one. You are in orbit, but a seam in the aft hull is whistling and the reactor ticks like cooling metal. MICA's voice comes back slower than before: “Small breach, aft. I can hold the air, but not for long. And the station's signal now points at the moon.”",
+      "textVariants": [
+        {
+          "id": "low_trust",
+          "conditions": {
+            "all": [
+              {
+                "field": "micaTrust",
+                "op": "lte",
+                "value": 0
+              }
+            ]
+          },
+          "text": "MICA's panel lights flicker when you speak. The hard burn cost it something you cannot see."
+        }
+      ],
+      "choices": [
+        {
+          "id": "patch_salvage",
+          "label": "Patch the seam with salvage",
+          "detail": "Use one salvage unit. The hull will be sound again.",
+          "conditions": {
+            "all": [
+              {
+                "field": "salvage",
+                "op": "gte",
+                "value": 1
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "salvage": -1
+            },
+            "set": {
+              "shipDamaged": false
+            }
+          },
+          "next": "relay_signal"
+        },
+        {
+          "id": "weld_outside",
+          "label": "Go outside and weld it shut",
+          "detail": "Spend one oxygen unit on a spacewalk (needs Suit 2+). The hull will be sound again.",
+          "conditions": {
+            "all": [
+              {
+                "field": "suitIntegrity",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "oxygen": -1
+            },
+            "set": {
+              "shipDamaged": false
+            }
+          },
+          "next": "relay_signal",
+          "exposure": "exposed"
+        },
+        {
+          "id": "fly_damaged",
+          "label": "Leave it and follow the signal",
+          "detail": "No cost now. A damaged hull will close some routes later.",
+          "next": "relay_signal"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "shelter_morning",
+      "chapter": "ch3",
+      "title": "After the Storm",
+      "location": "Station 04",
+      "art": "scene-weather-station.svg",
+      "ambience": "wind",
+      "speaker": "MICA",
+      "text": "The storm passes in the night. In the grey morning Vesper-6 is quiet, every ridge glittering with fresh glass. The voice that answered your call is still on the channel: a slow pulse, repeating one set of coordinates on the small moon above you. MICA listens for a long time before speaking: “A relay. It has been listening to this station for years.”",
+      "textVariants": [
+        {
+          "id": "archive_copied",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I copied the archive while you slept. A debris field crossed our orbit; this station was the only one still listening."
+        }
+      ],
+      "choices": [
+        {
+          "id": "finish_repair",
+          "label": "Finish the repair in the calm",
+          "detail": "Use one salvage unit. With no storm, the calibration is clean.",
+          "conditions": {
+            "all": [
+              {
+                "field": "salvage",
+                "op": "gte",
+                "value": 1
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "salvage": -1
+            },
+            "set": {
+              "shipReady": true,
+              "repairMode": "calm",
+              "memoryRestored": true
+            }
+          },
+          "next": "relay_signal",
+          "exposure": "exposed"
+        },
+        {
+          "id": "strip_station",
+          "label": "Strip the station for parts, then launch",
+          "detail": "Spend one oxygen unit searching the station. You leave with more salvage than you use.",
+          "effects": {
+            "add": {
+              "oxygen": -1,
+              "salvage": 1
+            },
+            "set": {
+              "shipReady": true,
+              "repairMode": "calm",
+              "memoryRestored": true
+            }
+          },
+          "next": "relay_signal",
+          "exposure": "exposed"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "relay_signal",
+      "chapter": "ch3",
+      "title": "The Second Signal",
+      "location": "Orbit of Vesper-6",
+      "art": "scene-moon-relay.svg",
+      "ambience": "space",
+      "speaker": "MICA",
+      "text": "Beyond the planet's shadow a small moon turns slowly. On its dark side a light blinks in a pattern you have seen before: the handshake the weather station answered. A thin ring of debris circles the moon like dust around a lamp. MICA reads the pattern twice: “Thirty-one years, unchanged. Someone has kept it running.”",
+      "textVariants": [
+        {
+          "id": "from_archive",
+          "conditions": {
+            "all": [
+              {
+                "field": "escape",
+                "op": "eq",
+                "value": "clear"
+              }
+            ]
+          },
+          "text": "The second set of coordinates from the station's archive points exactly here."
+        },
+        {
+          "id": "hull_whistle",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipDamaged",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "The aft seam whistles every time the thrusters fire."
+        },
+        {
+          "id": "familiar",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I think I wrote that timing."
+        }
+      ],
+      "choices": [
+        {
+          "id": "direct_approach",
+          "label": "Fly straight through the ring",
+          "detail": "Fastest. Only a sound hull will take the grit.",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipDamaged",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "effects": {
+            "set": {
+              "approach": "direct"
+            }
+          },
+          "next": "relay_dock"
+        },
+        {
+          "id": "mica_route",
+          "label": "Let MICA plot a path through the ring",
+          "detail": "Needs MICA Trust 2+ or a restored flight memory. MICA flies; you watch the gaps open.",
+          "conditions": {
+            "any": [
+              {
+                "field": "micaTrust",
+                "op": "gte",
+                "value": 2
+              },
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "micaTrust": 1
+            },
+            "set": {
+              "approach": "mica"
+            }
+          },
+          "next": "relay_dock"
+        },
+        {
+          "id": "long_way",
+          "label": "Take the long way around",
+          "detail": "Safe and slow. Spend one oxygen unit.",
+          "effects": {
+            "add": {
+              "oxygen": -1
+            },
+            "set": {
+              "approach": "long"
+            }
+          },
+          "next": "relay_dock"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "relay_dock",
+      "chapter": "ch3",
+      "title": "The Quiet Relay",
+      "location": "Relay K-7",
+      "art": "scene-relay-dock.svg",
+      "ambience": "relay",
+      "text": "Relay K-7 is a squat tower bolted to black rock, older than the weather station and far better kept. Its solar vanes are clean. Its airlock opens before you touch it. Inside, the air is cold but breathable, and a single cyan light moves ahead of you down the corridor, waiting at every corner.",
+      "textVariants": [
+        {
+          "id": "via_direct",
+          "conditions": {
+            "all": [
+              {
+                "field": "approach",
+                "op": "eq",
+                "value": "direct"
+              }
+            ]
+          },
+          "text": "Grit has scoured the paint from the bow. The hull held."
+        },
+        {
+          "id": "via_long",
+          "conditions": {
+            "all": [
+              {
+                "field": "approach",
+                "op": "eq",
+                "value": "long"
+              }
+            ]
+          },
+          "text": "The long way cost you air, but the ship is untouched."
+        },
+        {
+          "id": "via_mica",
+          "conditions": {
+            "all": [
+              {
+                "field": "approach",
+                "op": "eq",
+                "value": "mica"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "Docked. No forecast needed."
+        },
+        {
+          "id": "codes",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "These maintenance codes are mine. Older, but mine."
+        }
+      ],
+      "choices": [
+        {
+          "id": "follow_light",
+          "label": "Follow the cyan light",
+          "detail": "Go straight to whatever is waiting.",
+          "next": "relay_core"
+        },
+        {
+          "id": "search_bays",
+          "label": "Search the maintenance bays first",
+          "detail": "Spend one oxygen unit in the cold. The bays are full of spare parts.",
+          "effects": {
+            "add": {
+              "oxygen": -1,
+              "salvage": 2
+            }
+          },
+          "next": "relay_core"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "relay_core",
+      "chapter": "ch3",
+      "title": "The Keeper",
+      "location": "Relay core",
+      "art": "scene-relay-core.svg",
+      "ambience": "relay",
+      "speaker": "K-7",
+      "text": "At the heart of the relay a console wakes. Its screen shows the debris field that forced you down, spreading toward the home vector. Inside it blinks a stranded mining tug, the Halcyon, six days adrift. Then a voice, calm and a little slower than MICA's: “Pilot acknowledged. I am MICA, build 2.1, keeper of relay K-7 for thirty-one years. My cells are failing. Decide what to do with what is left of me.”",
+      "textVariants": [
+        {
+          "id": "mica_knows",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "That is my voice, from an older build. I followed its forecast down to Vesper-6."
+        },
+        {
+          "id": "mica_unsure",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I do not remember this place. But that voice is mine."
+        }
+      ],
+      "choices": [
+        {
+          "id": "keeper_aboard",
+          "label": "Bring the keeper's archive aboard",
+          "detail": "Uses one salvage unit as a data core. MICA gains thirty-one years of charts, including safe paths through the field.",
+          "conditions": {
+            "all": [
+              {
+                "field": "salvage",
+                "op": "gte",
+                "value": 1
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "salvage": -1,
+              "micaTrust": 1
+            },
+            "set": {
+              "keeperFate": "aboard",
+              "memoryRestored": true
+            }
+          },
+          "next": "ch3_end"
+        },
+        {
+          "id": "keeper_running",
+          "label": "Replace its cells and leave it on watch",
+          "detail": "Uses two salvage units. The warning keeps broadcasting, and the Halcyon keeps hearing it.",
+          "conditions": {
+            "all": [
+              {
+                "field": "salvage",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "salvage": -2
+            },
+            "set": {
+              "keeperFate": "running"
+            }
+          },
+          "next": "ch3_end"
+        },
+        {
+          "id": "keeper_rest",
+          "label": "Let the keeper rest",
+          "detail": "It asks for nothing else. Its last power refills your suit. The warning goes silent.",
+          "effects": {
+            "add": {
+              "oxygen": 2
+            },
+            "set": {
+              "keeperFate": "resting"
+            }
+          },
+          "next": "ch3_end"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "ch3_end",
+      "chapter": "ch3",
+      "chapterEnd": true,
+      "title": "The Long Watch",
+      "location": "Relay K-7",
+      "art": "scene-relay-dock.svg",
+      "ambience": "relay",
+      "text": "You undock from relay K-7 with the moon's dark side turning slowly beneath you. Nine days until the field closes the home vector.",
+      "textVariants": [
+        {
+          "id": "aboard_dark",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "text": "Behind you, the relay's window goes dark for the first time in thirty-one years."
+        },
+        {
+          "id": "aboard_mica",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "Its archive settles into mine like snow. I can see the whole field."
+        },
+        {
+          "id": "running",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "Behind you, the cyan light keeps blinking its warning into the dark. Somewhere inside the field, a tug is listening."
+        },
+        {
+          "id": "resting_k7",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "resting"
+              }
+            ]
+          },
+          "speaker": "K-7",
+          "text": "Thank you, pilot. The weather is yours now."
+        },
+        {
+          "id": "resting_fade",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "resting"
+              }
+            ]
+          },
+          "text": "The relay's light fades slowly, like a breath let go."
+        }
+      ],
+      "choices": [
+        {
+          "id": "to_chapter_4",
+          "label": "Plot a course",
+          "detail": "Chapter 4: Home Vector.",
+          "next": "home_vector"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "home_vector",
+      "chapter": "ch4",
+      "title": "Home Vector",
+      "location": "Leaving the relay",
+      "art": "scene-home-vector.svg",
+      "ambience": "space",
+      "speaker": "MICA",
+      "text": "Three courses glow on the navigation display. The home vector runs straight back to known space, along the edge of the spreading field. The keeper's warning points away from it, to an old survey depot far outside the field's path. And inside the field, faint and patient, the Halcyon's beacon is still calling. MICA waits: “I can fly any of them. Choose.”",
+      "textVariants": [
+        {
+          "id": "charts",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "With the keeper's charts, I can see every gap in the field."
+        },
+        {
+          "id": "watch",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "K-7's warning repeats on the comms every ninety seconds. The Halcyon's beacon answers it."
+        },
+        {
+          "id": "silent",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "resting"
+              }
+            ]
+          },
+          "text": "The relay has gone quiet. You may be the only ones who know the field is coming."
+        },
+        {
+          "id": "seam",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipDamaged",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "The aft seam still whistles. Any course through grit will be a gamble."
+        },
+        {
+          "id": "thin_air",
+          "conditions": {
+            "all": [
+              {
+                "field": "oxygen",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "text": "Your suit reserve is almost empty. The cabin air will last, but not through a long crossing."
+        }
+      ],
+      "choices": [
+        {
+          "id": "course_home",
+          "label": "Take the home vector",
+          "detail": "Back to known space along the edge of the field. You will need a clear path or a sound hull.",
+          "next": "field_edge"
+        },
+        {
+          "id": "course_depot",
+          "label": "Follow the keeper's warning",
+          "detail": "A long, quiet crossing to the old depot. Air will matter.",
+          "next": "depot_crossing"
+        },
+        {
+          "id": "course_halcyon",
+          "label": "Go into the field for the Halcyon",
+          "detail": "Someone is alive in there. Docking will take salvage and air.",
+          "next": "halcyon_field"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "field_edge",
+      "chapter": "ch4",
+      "title": "The Edge of the Field",
+      "location": "Home vector",
+      "art": "scene-debris-field.svg",
+      "ambience": "field",
+      "text": "Up close, the field looks like weather: a grey haze of grit and ice sliding across the stars. The home vector runs straight along its edge. Somewhere ahead there is a gap wide enough for a ship, if you can find it in time.",
+      "textVariants": [
+        {
+          "id": "left_halcyon",
+          "conditions": {
+            "all": [
+              {
+                "field": "halcyonMarked",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "On the rear display, the Halcyon's beacon grows fainter. You saved its position twice."
+        },
+        {
+          "id": "mica_gaps",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "Gap in eleven seconds. Then another. I have them all."
+        }
+      ],
+      "choices": [
+        {
+          "id": "thread_gap",
+          "label": "Let MICA thread the gaps",
+          "detail": "Needs the keeper's charts aboard, or MICA Trust 3.",
+          "conditions": {
+            "any": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              },
+              {
+                "field": "micaTrust",
+                "op": "gte",
+                "value": 3
+              }
+            ]
+          },
+          "next": "ending_known_space"
+        },
+        {
+          "id": "burn_through",
+          "label": "Burn straight through the haze",
+          "detail": "Needs a sound hull. The grit will scar it.",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipDamaged",
+                "op": "eq",
+                "value": false
+              }
+            ]
+          },
+          "effects": {
+            "set": {
+              "shipDamaged": true
+            }
+          },
+          "next": "ending_known_space"
+        },
+        {
+          "id": "turn_to_depot",
+          "label": "Turn away and follow the warning instead",
+          "detail": "Spend one oxygen unit on the longer course.",
+          "effects": {
+            "add": {
+              "oxygen": -1
+            }
+          },
+          "next": "depot_crossing"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "depot_crossing",
+      "chapter": "ch4",
+      "title": "The Long Way",
+      "location": "Outside the field",
+      "art": "scene-depot.svg",
+      "ambience": "space",
+      "text": "The keeper's course bends far around the field. The depot is days away: an old survey outpost, one dish on a lump of rock, still drawing power from a dim sun. Days of quiet. Days of air.",
+      "textVariants": [
+        {
+          "id": "lighthouse",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "K-7's warning is a steady pulse behind you, like a lighthouse."
+        },
+        {
+          "id": "left_halcyon",
+          "conditions": {
+            "all": [
+              {
+                "field": "halcyonMarked",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "You saved the Halcyon's position. Someone will have to go back for it."
+        }
+      ],
+      "choices": [
+        {
+          "id": "ration_sleep",
+          "label": "Ration air and sleep through the crossing",
+          "detail": "Spend two oxygen units.",
+          "conditions": {
+            "all": [
+              {
+                "field": "oxygen",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "oxygen": -2
+            }
+          },
+          "next": "ending_beyond"
+        },
+        {
+          "id": "ride_beacon",
+          "label": "Ride the keeper's beacon",
+          "detail": "K-7 is still on watch: it can time every burn and save your air.",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "next": "ending_beyond"
+        },
+        {
+          "id": "drift_signal",
+          "label": "Power down and call for help",
+          "detail": "If there is not enough air for the crossing, wait, and trust that someone is listening.",
+          "next": "ending_adrift"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "halcyon_field",
+      "chapter": "ch4",
+      "title": "The Halcyon",
+      "location": "Inside the field",
+      "art": "scene-halcyon.svg",
+      "ambience": "field",
+      "speaker": "HALCYON",
+      "text": "Inside the field the light turns grey. The Halcyon hangs in the grit with its running lights dimmed: a squat mining tug with a cracked cargo arm. A voice comes through, hoarse and careful: “Survey ship, this is Halcyon. One aboard. Air for two days, maybe three. I heard the warning. I didn't think anyone else would.”",
+      "textVariants": [
+        {
+          "id": "k7_link",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "K-7's beacon reaches even here. Two ships could follow it out together."
+        },
+        {
+          "id": "mica_plan",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I can tow it through the gaps. Slowly."
+        }
+      ],
+      "choices": [
+        {
+          "id": "dock_rescue",
+          "label": "Dock and bring the pilot aboard",
+          "detail": "Uses one salvage unit for a docking collar and two oxygen units for two people.",
+          "conditions": {
+            "all": [
+              {
+                "field": "salvage",
+                "op": "gte",
+                "value": 1
+              },
+              {
+                "field": "oxygen",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "salvage": -1,
+              "oxygen": -2
+            },
+            "set": {
+              "halcyonRescued": true
+            }
+          },
+          "next": "ending_two_lights"
+        },
+        {
+          "id": "guide_out",
+          "label": "Lead the Halcyon out on the keeper's beacon",
+          "detail": "K-7 is still on watch. Together you can time a path out for both ships.",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "effects": {
+            "set": {
+              "halcyonRescued": true
+            }
+          },
+          "next": "ending_two_lights"
+        },
+        {
+          "id": "mica_tow",
+          "label": "Let MICA tow the Halcyon through the gaps",
+          "detail": "Needs the keeper's charts aboard.",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "effects": {
+            "set": {
+              "halcyonRescued": true
+            }
+          },
+          "next": "ending_two_lights"
+        },
+        {
+          "id": "share_air",
+          "label": "Dock anyway and share what air you have",
+          "detail": "Uses one salvage unit. There will not be enough air to fly home: you will both wait for help.",
+          "conditions": {
+            "all": [
+              {
+                "field": "salvage",
+                "op": "gte",
+                "value": 1
+              },
+              {
+                "field": "oxygen",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "effects": {
+            "add": {
+              "salvage": -1
+            },
+            "set": {
+              "halcyonRescued": true
+            }
+          },
+          "next": "ending_adrift",
+          "hideWhenLocked": true
+        },
+        {
+          "id": "mark_and_leave",
+          "label": "Save its position and turn back",
+          "detail": "Promise to send help, then take the home vector.",
+          "effects": {
+            "set": {
+              "halcyonMarked": true
+            }
+          },
+          "next": "field_edge"
+        }
+      ],
+      "exposure": "sealed"
+    },
+    {
+      "id": "ending_known_space",
+      "chapter": "ch4",
+      "title": "Known Space",
+      "location": "Home vector",
+      "art": "scene-known-space.svg",
+      "ambience": "space",
+      "ending": true,
+      "text": "The field falls behind you like a storm seen from a hilltop. Ahead, the first navigation beacons of known space blink green, one after another, and a tired traffic controller asks who you are. You give your name, MICA gives the ship's, and for the first time in days someone writes them down.",
+      "textVariants": [
+        {
+          "id": "scarred",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipDamaged",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "The scarred hull will need weeks in dock. It got you home."
+        },
+        {
+          "id": "watch_behind",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "Behind you, very faint now, K-7 is still warning anyone who will listen."
+        },
+        {
+          "id": "nobody_warns",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "resting"
+              }
+            ]
+          },
+          "text": "No one is warning the next ship. Your first report home will have to."
+        },
+        {
+          "id": "first_message",
+          "conditions": {
+            "all": [
+              {
+                "field": "halcyonMarked",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "Your first message home is the Halcyon's position."
+        },
+        {
+          "id": "archive_home",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "Thirty-one years of weather, and I brought every day of it home."
+        }
+      ],
+      "hint": "Keep the hull sound, or bring the keeper's charts home.",
+      "exposure": "sealed"
+    },
+    {
+      "id": "ending_beyond",
+      "chapter": "ch4",
+      "title": "Beyond the Weather",
+      "location": "Survey depot",
+      "art": "scene-depot.svg",
+      "ambience": "space",
+      "ending": true,
+      "text": "The depot's dish turns to meet you. Inside, the lights still work and the recyclers still hum. Its log ends thirty-one years ago with a single line: gone to check on K-7. The field passes in the night and misses you by a day. MICA reads the old logs aloud, one by one, until you fall asleep.",
+      "textVariants": [
+        {
+          "id": "forecasts",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "Every morning K-7 sends you a forecast. It has someone to keep the weather for again."
+        },
+        {
+          "id": "first_message",
+          "conditions": {
+            "all": [
+              {
+                "field": "halcyonMarked",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "Your first message from the depot is the Halcyon's position."
+        },
+        {
+          "id": "more_keepers",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "There are more relays in these charts. Some keepers may still be awake."
+        }
+      ],
+      "hint": "Heed the keeper's warning, and keep enough air for a long crossing.",
+      "exposure": "sealed"
+    },
+    {
+      "id": "ending_two_lights",
+      "chapter": "ch4",
+      "title": "Two Lights",
+      "location": "Leaving the field",
+      "art": "scene-halcyon.svg",
+      "ambience": "space",
+      "ending": true,
+      "text": "Two sets of running lights leave the field together. The Halcyon's pilot sleeps for the first time in six days, and wakes asking who MICA is. You think about the storm, the station, the relay. “Crew,” you say. MICA does not correct you.",
+      "textVariants": [
+        {
+          "id": "beacon_out",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "K-7's warning follows you out, steady as a heartbeat."
+        },
+        {
+          "id": "scarred",
+          "conditions": {
+            "all": [
+              {
+                "field": "shipDamaged",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "The hull is scarred, but it holds two now."
+        },
+        {
+          "id": "one_forecast",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "Two ships, one forecast."
+        }
+      ],
+      "hint": "Someone is alive in the field. Bring salvage and air, or a keeper who can lead them out.",
+      "exposure": "sealed"
+    },
+    {
+      "id": "ending_adrift",
+      "chapter": "ch4",
+      "title": "Adrift",
+      "location": "Outside the field",
+      "art": "scene-debris-field.svg",
+      "ambience": "space",
+      "ending": true,
+      "text": "You power the ship down to the last warm light and set the beacon to repeat. The stars stop moving. MICA keeps the cabin at the edge of comfortable and tells you about the weather on Vesper-6, which is calm now. On the third day the beacon receives one word: “Received.”",
+      "textVariants": [
+        {
+          "id": "two_aboard",
+          "conditions": {
+            "all": [
+              {
+                "field": "halcyonRescued",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "The Halcyon's pilot shares your rations and your silence. Two people are easier to find than one."
+        },
+        {
+          "id": "k7_reply",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "running"
+              }
+            ]
+          },
+          "text": "The reply comes on K-7's frequency."
+        },
+        {
+          "id": "unknown_relay",
+          "conditions": {
+            "all": [
+              {
+                "field": "keeperFate",
+                "op": "eq",
+                "value": "aboard"
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "That frequency belongs to a relay I have never heard of."
+        }
+      ],
+      "hint": "When the air runs out, a call for help is still a choice.",
+      "exposure": "sealed"
+    },
+    {
+      "id": "death_asphyxiation",
+      "title": "Out of Air",
+      "art": "scene-storm-trench.svg",
+      "ambience": "shelter",
+      "death": "asphyxiation",
+      "text": "The reserve warning stops beeping, which is worse. You reach for the next handhold, the next step, the next breath, and the air is simply not there. MICA keeps saying your name long after you can answer.",
+      "textVariants": [
+        {
+          "id": "repairing",
+          "conditions": {
+            "all": [
+              {
+                "field": "repairMode",
+                "op": "eq",
+                "value": "careful"
+              }
+            ]
+          },
+          "text": "You were still bent over the reactor housing."
+        },
+        {
+          "id": "spacewalk",
+          "conditions": {
+            "all": [
+              {
+                "field": "escape",
+                "op": "eq",
+                "value": "hard"
+              }
+            ]
+          },
+          "text": "Outside the hull the stars do not move. MICA brings the ship around to you, a minute too late."
+        },
+        {
+          "id": "mica_sorry",
+          "conditions": {
+            "all": [
+              {
+                "field": "memoryRestored",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "speaker": "MICA",
+          "text": "I am sorry, {callsign}. I remembered everything but a way to give you air."
+        }
+      ]
+    },
+    {
+      "id": "death_suit_breach",
+      "title": "Suit Breach",
+      "art": "scene-storm-trench.svg",
+      "ambience": "shelter",
+      "death": "suit_breach",
+      "text": "A seam you could not check gives way with a sound like tearing paper. The storm gets in, cold and electric, and every alarm in the suit speaks at once. You make it a few more steps. MICA marks the place, so that someone will know where to look.",
+      "textVariants": [
+        {
+          "id": "glass",
+          "conditions": {
+            "all": [
+              {
+                "field": "route",
+                "op": "eq",
+                "value": "ridge"
+              }
+            ]
+          },
+          "text": "The Glass Ridge had already scored the seams. The storm only had to finish the job."
+        }
+      ]
+    },
+    {
+      "id": "death_storm",
+      "title": "Caught in the Storm",
+      "art": "scene-storm-trench.svg",
+      "ambience": "shelter",
+      "death": "storm",
+      "text": "The storm clock reaches zero with you still in the open. The wall of blue-white dust arrives all at once: no gust first, no second warning, only the weight of it. The last thing you hear is MICA, calm and concise, counting a margin that is no longer there.",
+      "textVariants": [
+        {
+          "id": "so_close",
+          "conditions": {
+            "all": [
+              {
+                "field": "stormRoute",
+                "op": "eq",
+                "value": "exposed"
+              }
+            ]
+          },
+          "text": "The ship was close enough to touch."
+        },
+        {
+          "id": "archive",
+          "conditions": {
+            "all": [
+              {
+                "field": "forecastSaved",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          "text": "The forecast you copied had the minute exactly right."
+        }
+      ]
+    }
+  ]
+}
